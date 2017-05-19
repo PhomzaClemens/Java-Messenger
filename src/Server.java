@@ -7,25 +7,30 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Server extends JFrame {
 
-    private JTextField userText;
-    private JTextArea chatWindow;
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
     private ServerSocket server;
     private Socket connection;
-
+    private Thread thread;
+//    private ServerThread client;
+    private ObjectOutputStream output;
+    private ObjectInputStream input;
+    private JTextField userText;
+    private JTextArea chatWindow;
+    private static int PORT = 6789;
+    
     // constructor
-    public Server() {
-        super("Buckys Instant Messenger");
+    public Server(int port) {
+        super("Java Messenger");
+        PORT = port;
         userText = new JTextField();
         userText.setEditable(false);
-        userText.addActionListener(new ActionListener() {
+        userText.addActionListener(new ActionListener() {  
             public void actionPerformed(ActionEvent event) {
-                sendMessage(event.getActionCommand());
+                sendMessage(event.getActionCommand());  // send message after pressing the return key
                 userText.setText("");
             }
         });
         add(userText, BorderLayout.SOUTH);
+        
         chatWindow = new JTextArea();
         chatWindow.setEditable(false);
         add(new JScrollPane(chatWindow));
@@ -35,7 +40,8 @@ public class Server extends JFrame {
 
     public void startRunning() {
         try {
-            server = new ServerSocket(6789, 100); // 6789 is a dummy port for
+            System.out.println("Binding to port " + PORT + ", please wait...");
+            server = new ServerSocket(PORT, 100); // 6789 is a dummy port for
                                                   // testing, this can be
                                                   // changed. The 100 is the
                                                   // maximum people waiting to
@@ -62,10 +68,23 @@ public class Server extends JFrame {
     private void waitForConnection() throws IOException {
         showMessage(" Waiting for someone to connect... \n");
         connection = server.accept();
+//        addThread(connection);  // start a new thread when a new connection is made
         showMessage(" Now connected to " + connection.getInetAddress().getHostName());
     }
 
-    // get stream to send and receive data
+//    // add a thread
+//    public void addThread(Socket socket) {
+//        System.out.println("Client accepted: " + socket);
+//        client = new ChatServerThread(this, socket);
+//        try {
+//            client.open();
+//            client.start();
+//        } catch(IOException e) {
+//            System.out.println("Error opening thread: " + e);
+//        }
+//    }
+    
+    // setup stream to send and receive data
     private void setupStreams() throws IOException {
         output = new ObjectOutputStream(connection.getOutputStream());
         output.flush();
@@ -78,8 +97,8 @@ public class Server extends JFrame {
     // during the chat conversation
     private void whileChatting() throws IOException {
         String message = " You are now connected! ";
-        sendMessage(message);
-        ableToType(true);
+        sendMessage(message);  // let the client know that they're connected
+        ableToType(true);  // let the server be able to type
         do {
             try {
                 message = (String) input.readObject();
@@ -87,29 +106,28 @@ public class Server extends JFrame {
             } catch (ClassNotFoundException classNotFoundException) {
                 showMessage("The user has sent an unknown object!");
             }
-        } while (!message.equals("CLIENT - END"));
+        } while (!message.equals("CLIENT - END"));  // 
     }
 
+    // close the output and input streams, and close the socket connection
     public void closeConnection() {
         showMessage("\n Closing Connections... \n");
         ableToType(false);
         try {
-            output.close(); // Closes the output path to the client
-            input.close(); // Closes the input path to the server, from the
-                           // client.
-            connection.close(); // Closes the connection between you can the
-                                // client
+            output.close(); // closes the output path to the client
+            input.close(); // closes the input path to the server, from the client
+            connection.close(); // closes the connection between you can the client
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
     }
 
-    // Send a mesage to the client
+    // send a message to the client
     private void sendMessage(String message) {
         try {
-            output.writeObject("SERVER - " + message);
+            output.writeObject("SERVER - " + message);  // write message to the ObjectOutputStream
             output.flush();
-            showMessage("\nSERVER -" + message);
+            showMessage("\nSERVER - " + message);  // update the chat window
         } catch (IOException ioException) {
             chatWindow.append("\n ERROR: CANNOT SEND MESSAGE, PLEASE RETRY");
         }
@@ -124,11 +142,13 @@ public class Server extends JFrame {
         });
     }
 
-    private void ableToType(final boolean tof) {
+    // set editable to on or off
+    private void ableToType(final boolean trueOrFalse) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                userText.setEditable(tof);
+                userText.setEditable(trueOrFalse);
             }
         });
     }
 }
+
