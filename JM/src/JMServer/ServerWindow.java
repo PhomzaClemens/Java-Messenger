@@ -110,6 +110,8 @@ public class ServerWindow extends javax.swing.JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_jButton2ActionPerformed
+        File workingDirectory = new File(System.getProperty("user.dir") + "/src");
+        fileChooser.setCurrentDirectory(workingDirectory);
         fileChooser.showDialog(this, "Open");
         File file = fileChooser.getSelectedFile();
 
