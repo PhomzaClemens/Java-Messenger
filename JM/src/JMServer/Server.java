@@ -8,48 +8,50 @@ public class Server implements Runnable {
     public ServerThread clients[];
     public ServerSocket server = null;
     public Thread thread = null;
-    public int clientCount = 0, port = 13000;
+    public int clientCount = 0, port = 9000;
     public ServerWindow ui;
     public Database db;
 
-    public Server(ServerWindow frame) {
+    // constructor
+    public Server(ServerWindow serverWindow) {
 
         clients = new ServerThread[50];
-        ui = frame;
+        ui = serverWindow;
         db = new Database(ui.filePath);
 
         try {
             server = new ServerSocket(port);
             port = server.getLocalPort();
-            ui.jTextArea1.append("Server startet. IP : " + InetAddress.getLocalHost() + ", Port : " + server.getLocalPort());
+            ui.jTextArea1.append("Server running... IP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort());
             start();
         } catch (IOException ioe) {
-            ui.jTextArea1.append("Cannot bind to port : " + port + "\nRetrying");
+            ui.jTextArea1.append("Cannot bind to port: " + port + "\nRetrying");
             ui.RetryStart(0);
         }
     }
 
-    public Server(ServerWindow frame, int Port) {
+    // constructor
+    public Server(ServerWindow serverWindow, int Port) {
 
         clients = new ServerThread[50];
-        ui = frame;
+        ui = serverWindow;
         port = Port;
         db = new Database(ui.filePath);
 
         try {
             server = new ServerSocket(port);
             port = server.getLocalPort();
-            ui.jTextArea1.append("Server startet. IP : " + InetAddress.getLocalHost() + ", Port : " + server.getLocalPort());
+            ui.jTextArea1.append("Server running... IP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort());
             start();
         } catch (IOException ioe) {
-            ui.jTextArea1.append("\nCan not bind to port " + port + ": " + ioe.getMessage());
+            ui.jTextArea1.append("\nCannot bind to port " + port + ": " + ioe.getMessage());
         }
     }
 
     public void run() {
         while (thread != null) {
             try {
-                ui.jTextArea1.append("\nWaiting for a client ...");
+                ui.jTextArea1.append("\nWaiting for a client...");
                 addThread(server.accept());
             } catch (Exception ioe) {
                 ui.jTextArea1.append("\nServer accept error: \n");
@@ -68,7 +70,7 @@ public class Server implements Runnable {
     @SuppressWarnings("deprecation")
     public void stop() {
         if (thread != null) {
-            thread.stop();
+            thread.interrupt();
             thread = null;
         }
     }
@@ -82,8 +84,9 @@ public class Server implements Runnable {
         return -1;
     }
 
+    // handle incoming messages
     public synchronized void handle(int ID, Message msg) {
-        if (msg.content.equals(".bye")) {
+        if (msg.content.equals(".disconnect")) {
             Announce("signout", "SERVER", msg.sender);
             remove(ID);
         } else {
@@ -135,15 +138,15 @@ public class Server implements Runnable {
         }
     }
 
-    public void SendUserList(String toWhom) {
+    public void SendUserList(String user) {
         for (int i = 0; i < clientCount; i++) {
-            findUserThread(toWhom).send(new Message("newuser", "SERVER", clients[i].username, toWhom));
+            findUserThread(user).send(new Message("newuser", "SERVER", clients[i].username, user));
         }
     }
 
-    public ServerThread findUserThread(String usr) {
+    public ServerThread findUserThread(String user) {
         for (int i = 0; i < clientCount; i++) {
-            if (clients[i].username.equals(usr)) {
+            if (clients[i].username.equals(user)) {
                 return clients[i];
             }
         }
@@ -167,7 +170,7 @@ public class Server implements Runnable {
             } catch (IOException ioe) {
                 ui.jTextArea1.append("\nError closing thread: " + ioe);
             }
-            toTerminate.stop();
+            toTerminate.interrupt();
         }
     }
 

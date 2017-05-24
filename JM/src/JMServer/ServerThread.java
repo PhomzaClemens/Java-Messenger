@@ -24,6 +24,7 @@ class ServerThread extends Thread {
     public ObjectOutputStream streamOut = null;
     public ServerWindow ui;
 
+    // constructor
     public ServerThread(Server _server, Socket _socket) {
         super();
         server = _server;
@@ -32,15 +33,17 @@ class ServerThread extends Thread {
         ui = _server.ui;
     }
 
+    // send a message
     public void send(Message msg) {
         try {
             streamOut.writeObject(msg);
             streamOut.flush();
-        } catch (IOException ex) {
-            System.out.println("Exception [SocketClient : send(...)]");
+        } catch (IOException exception) {
+            System.out.println("Exception [SocketClient    send(...)]");
         }
     }
 
+    // get thread ID
     public int getID() {
         return ID;
     }
@@ -60,12 +63,14 @@ class ServerThread extends Thread {
         }
     }
 
+    // open I/O streams
     public void open() throws IOException {
         streamOut = new ObjectOutputStream(socket.getOutputStream());
         streamOut.flush();
         streamIn = new ObjectInputStream(socket.getInputStream());
     }
 
+    // socket and I/O streams
     public void close() throws IOException {
         if (socket != null) {
             socket.close();

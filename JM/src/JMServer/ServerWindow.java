@@ -39,6 +39,7 @@ public class ServerWindow extends javax.swing.JFrame {
         setTitle("Java Messenger - Server");
         setPreferredSize(new java.awt.Dimension(780, 420));
 
+        jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
         jButton1.setText("Start Server");
         jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -48,12 +49,16 @@ public class ServerWindow extends javax.swing.JFrame {
         });
 
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
+        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
         jLabel3.setText("Database File:");
 
+        jTextField3.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
+
+        jButton2.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
         jButton2.setText("Open");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -72,7 +77,7 @@ public class ServerWindow extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -117,6 +122,7 @@ public class ServerWindow extends javax.swing.JFrame {
 
         if (file != null) {
             filePath = file.getPath();
+            
             if (this.isWin32()) {
                 filePath = filePath.replace("\\", "/");
             }

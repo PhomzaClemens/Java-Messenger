@@ -2,161 +2,183 @@ package JMClient;
 
 import java.io.*;
 import java.net.*;
-import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import JMServer.Message;
+import java.text.DateFormat;
+import java.util.Date;
+import javax.swing.DefaultListModel;
 
 public class Client implements Runnable {
 
+    public ClientWindow clientWindow;
+    public String serverAddress;
     public int port;
-    public String serverAddr;
     public Socket socket;
-    public ClientWindow ui;
-    public ObjectInputStream In;
-    public ObjectOutputStream Out;
-    public History hist;
+    public ObjectInputStream streamIn;
+    public ObjectOutputStream streamOut;
+    public History history;
 
-    public Client(ClientWindow frame) throws IOException {
-        ui = frame;
-        this.serverAddr = ui.serverAddr;
-        this.port = ui.port;
-        socket = new Socket(InetAddress.getByName(serverAddr), port);
+    // constructor
+    public Client(ClientWindow _clientWindow) throws IOException {
 
-        Out = new ObjectOutputStream(socket.getOutputStream());
-        Out.flush();
-        In = new ObjectInputStream(socket.getInputStream());
+        clientWindow = _clientWindow;
+        serverAddress = clientWindow.serverAddress;
+        port = clientWindow.port;
 
-        hist = ui.hist;
+        // creates a stream socket and connect it to the specified port number at the specified IP address
+        socket = new Socket(InetAddress.getByName(serverAddress), port);
+
+        // open I/O streams
+        streamOut = new ObjectOutputStream(socket.getOutputStream());
+        streamOut.flush();
+        streamIn = new ObjectInputStream(socket.getInputStream());
+
+        // get a copy of the history object
+        history = clientWindow.history;
     }
 
+    // code executed in the thread
     @Override
     public void run() {
-        boolean keepRunning = true;
-        while (keepRunning) {
-            try {
-                Message msg = (Message) In.readObject();
-                System.out.println("Incoming : " + msg.toString());
-
-                if (msg.type.equals("message")) {
-                    if (msg.recipient.equals(ui.username)) {
-                        ui.jTextArea1.append("[" + msg.sender + " -> Me] : " + msg.content + "\n");
-                    } else {
-                        ui.jTextArea1.append("[" + msg.sender + " -> " + msg.recipient + "] : " + msg.content + "\n");
-                    }
-
-                    if (!msg.content.equals(".bye") && !msg.sender.equals(ui.username)) {
-                        String msgTime = (new Date()).toString();
-
-                        try {
-                            hist.addMessage(msg, msgTime);
-                            DefaultTableModel table = (DefaultTableModel) ui.historyFrame.jTable1.getModel();
-                            table.addRow(new Object[]{msg.sender, msg.content, "Me", msgTime});
-                        } catch (Exception ex) {
-                        }
-                    }
-                } else if (msg.type.equals("login")) {
-                    if (msg.content.equals("TRUE")) {
-                        ui.jButton2.setEnabled(false);
-                        ui.jButton3.setEnabled(false);
-                        ui.jButton4.setEnabled(true);
-                        ui.jTextArea1.append("[SERVER -> Me] : Login Successful\n");
-                        ui.jTextField3.setEnabled(false);
-                        ui.jPasswordField1.setEnabled(false);
-                    } else {
-                        ui.jTextArea1.append("[SERVER -> Me] : Login Failed\n");
-                    }
-                } else if (msg.type.equals("test")) {
-                    ui.jButton1.setEnabled(false);
-                    ui.jButton2.setEnabled(true);
-                    ui.jButton3.setEnabled(true);
-                    ui.jTextField3.setEnabled(true);
-                    ui.jPasswordField1.setEnabled(true);
-                    ui.jTextField1.setEditable(false);
-                    ui.jTextField2.setEditable(false);
-                    ui.jButton7.setEnabled(true);
-                } else if (msg.type.equals("newuser")) {
-                    if (!msg.content.equals(ui.username)) {
-                        boolean exists = false;
-                        for (int i = 0; i < ui.model.getSize(); i++) {
-                            if (ui.model.getElementAt(i).equals(msg.content)) {
-                                exists = true;
-                                break;
-                            }
-                        }
-                        if (!exists) {
-                            ui.model.addElement(msg.content);
-                        }
-                    }
-                } else if (msg.type.equals("register")) {
-                    if (msg.content.equals("TRUE")) {
-                        ui.jButton2.setEnabled(false);
-                        ui.jButton3.setEnabled(false);
-                        ui.jButton4.setEnabled(true);
-                        ui.jTextArea1.append("[SERVER -> Me] : Registration Successful\n");
-                    } else {
-                        ui.jTextArea1.append("[SERVER -> Me] : Registration Failed\n");
-                    }
-                } else if (msg.type.equals("signout")) {
-                    if (msg.content.equals(ui.username)) {
-                        ui.jTextArea1.append("[" + msg.sender + " -> Me] : Bye\n");
-                        ui.jButton1.setEnabled(true);
-                        ui.jButton4.setEnabled(false);
-                        ui.jTextField1.setEditable(true);
-                        ui.jTextField2.setEditable(true);
-
-                        for (int i = 1; i < ui.model.size(); i++) {
-                            ui.model.removeElementAt(i);
-                        }
-
-                        ui.clientThread.stop();
-                    } else {
-                        ui.model.removeElement(msg.content);
-                        ui.jTextArea1.append("[" + msg.sender + " -> Everyone] : " + msg.content + " has signed out\n");
-                    }
-                } else {
-                    ui.jTextArea1.append("[SERVER -> Me] : Unknown message type\n");
-                }
-            } catch (Exception ex) {
-                keepRunning = false;
-                ui.jTextArea1.append("[Application -> Me] : Connection Failure\n");
-                ui.jButton1.setEnabled(true);
-                ui.jTextField1.setEditable(true);
-                ui.jTextField2.setEditable(true);
-                ui.jButton4.setEnabled(false);
-
-                for (int i = 1; i < ui.model.size(); i++) {
-                    ui.model.removeElementAt(i);
-                }
-
-                ui.clientThread.stop();
-
-                System.out.println("Exception SocketClient run()");
-                ex.printStackTrace();
-            }
+        boolean isRunning = true;
+        while (isRunning) {
+            isRunning = clientWindowHandler();
         }
     }
 
-    public void send(Message msg) {
+    // handles incoming messages from the server
+    // updates the clientWindow
+    public boolean clientWindowHandler() {
+
+        String Me = clientWindow.username;
+        DefaultListModel userlistUI = clientWindow.model;
+
         try {
-            Out.writeObject(msg);
-            Out.flush();
-            System.out.println("Outgoing : " + msg.toString());
+            // get the message
+            Message message = (Message) streamIn.readObject();
+            System.out.println("Incoming: " + message.toString());
 
-            if (msg.type.equals("message") && !msg.content.equals(".bye")) {
-                String msgTime = (new Date()).toString();
+            // message cases:
+            if (message.type.equals("message")) {
+                // recipient is Me, or not Me
+                if (message.recipient.equals(Me)) {
+                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Me]    " + message.content + "\n");
+                } else {
+                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> " + message.recipient + "]    " + message.content + "\n");
+                }
+
+                if (!message.sender.equals(Me) && !message.content.equals(".disconnect")) {
+                    String messageTime = new Date().toString();
+
+                    try {
+                        history.addMessage(message, messageTime);
+                        DefaultTableModel table = (DefaultTableModel) clientWindow.historyWindow.historyTable.getModel();
+                        table.addRow(new Object[]{message.sender, message.content, "Me", messageTime});
+                    } catch (Exception exception) {
+                    }
+                }
+            } else if (message.type.equals("login")) {  // login message
+                if (message.content.equals("TRUE")) {
+                    clientWindow.loginButton.setEnabled(false);
+                    clientWindow.registerButton.setEnabled(false);
+                    clientWindow.clearButton.setEnabled(true);
+                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Successful\n");
+                    clientWindow.usernameTextField.setEnabled(false);
+                    clientWindow.passwordPasswordField.setEnabled(false);
+                } else {
+                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Failed\n");
+                }
+            } else if (message.type.equals("test")) {  // test message
+                clientWindow.loginButton.setEnabled(true);
+                clientWindow.registerButton.setEnabled(true);
+                clientWindow.usernameTextField.setEnabled(true);
+                clientWindow.passwordPasswordField.setEnabled(true);
+                clientWindow.serverAddressTextField.setEditable(false);
+                clientWindow.serverPortTextField.setEditable(false);
+            } else if (message.type.equals("newuser")) {  // new user message
+                if (!message.content.equals(Me)) {
+                    boolean exists = false;
+                    for (int i = 0; i < userlistUI.getSize(); i++) {
+                        if (userlistUI.getElementAt(i).equals(message.content)) {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists) {
+                        userlistUI.addElement(message.content);
+                    }
+                }
+            } else if (message.type.equals("register")) {  // register message
+                if (message.content.equals("TRUE")) {
+                    clientWindow.loginButton.setEnabled(false);
+                    clientWindow.registerButton.setEnabled(false);
+                    clientWindow.clearButton.setEnabled(true);
+                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Successful\n");
+                } else {
+                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Failed\n");
+                }
+            } else if (message.type.equals("signout")) {  // signout message
+                if (message.content.equals(Me)) {
+                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Me]    Bye\n");
+                    clientWindow.clearButton.setEnabled(false);
+                    clientWindow.serverAddressTextField.setEditable(true);
+                    clientWindow.serverPortTextField.setEditable(true);
+
+                    for (int i = 1; i < userlistUI.size(); i++) {
+                        userlistUI.removeElementAt(i);
+                    }
+
+                    clientWindow.clientThread.interrupt();
+                } else {
+                    userlistUI.removeElement(message.content);
+                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Everyone]    " + message.content + " has signed out\n");
+                }
+            } else {  // unknown message
+                clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Unknown message type\n");
+            }
+        } catch (IOException | ClassNotFoundException exception) {
+            clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [Application -> Me]    Connection Failure\n");
+            clientWindow.serverAddressTextField.setEditable(true);
+            clientWindow.serverPortTextField.setEditable(true);
+            clientWindow.clearButton.setEnabled(false);
+
+            for (int i = 1; i < userlistUI.size(); i++) {
+                userlistUI.removeElementAt(i);
+            }
+
+            clientWindow.clientThread.interrupt();
+
+            System.out.println("Exception Client.run()");
+            exception.printStackTrace();
+
+            return false;
+        }
+        return true;
+    }
+
+    // send a message
+    public void send(Message message) {
+        try {
+            streamOut.writeObject(message);
+            streamOut.flush();
+            System.out.println("Outgoing    " + message.toString());
+
+            if (message.type.equals("message") && !message.content.equals(".disconnect")) {
+                String messageTime = (new Date()).toString();
                 try {
-                    hist.addMessage(msg, msgTime);
-                    DefaultTableModel table = (DefaultTableModel) ui.historyFrame.jTable1.getModel();
-                    table.addRow(new Object[]{"Me", msg.content, msg.recipient, msgTime});
-                } catch (Exception ex) {
+                    history.addMessage(message, messageTime);
+                    DefaultTableModel table = (DefaultTableModel) clientWindow.historyWindow.historyTable.getModel();
+                    table.addRow(new Object[]{"Me", message.content, message.recipient, messageTime});
+                } catch (Exception exception) {
                 }
             }
-        } catch (IOException ex) {
-            System.out.println("Exception SocketClient send()");
+        } catch (IOException exception) {
+            System.out.println("Exception Client.send() ");
         }
     }
 
-    public void closeThread(Thread t) {
-        t = null;
+    // get the current time stamp
+    public String timeStamp() {
+        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());
     }
 }
