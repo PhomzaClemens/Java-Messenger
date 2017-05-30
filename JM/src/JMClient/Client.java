@@ -10,13 +10,13 @@ import javax.swing.DefaultListModel;
 
 public class Client implements Runnable {
 
-    public ClientWindow clientWindow;
     public String serverAddress;
     public int port;
     public Socket socket;
     public ObjectInputStream streamIn;
     public ObjectOutputStream streamOut;
     public History history;
+    public ClientWindow clientWindow;
 
     // constructor
     public Client(ClientWindow _clientWindow) throws IOException {
@@ -88,7 +88,7 @@ public class Client implements Runnable {
                 } else {
                     clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Failed\n");
                 }
-            } else if (message.type.equals("test")) {  // test message
+            } else if (message.type.equals("connect")) {  // test message
                 clientWindow.loginButton.setEnabled(true);
                 clientWindow.registerButton.setEnabled(true);
                 clientWindow.usernameTextField.setEnabled(true);
@@ -129,6 +129,7 @@ public class Client implements Runnable {
                     }
 
                     clientWindow.clientThread.interrupt();
+                    return false;
                 } else {
                     userlistUI.removeElement(message.content);
                     clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Everyone]    " + message.content + " has signed out\n");
@@ -159,10 +160,11 @@ public class Client implements Runnable {
     // send a message
     public void send(Message message) {
         try {
-            streamOut.writeObject(message);
+            streamOut.writeObject(message);  // send the message
             streamOut.flush();
-            System.out.println("Outgoing    " + message.toString());
+            System.out.println("Outgoing: " + message.toString());
 
+            // if the message type is a message, add it to the history module
             if (message.type.equals("message") && !message.content.equals(".disconnect")) {
                 String messageTime = (new Date()).toString();
                 try {

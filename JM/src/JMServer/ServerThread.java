@@ -54,7 +54,7 @@ class ServerThread extends Thread {
         while (true) {
             try {
                 Message msg = (Message) streamIn.readObject();
-                server.handle(ID, msg);
+                server.handler(ID, msg);
             } catch (Exception ioe) {
                 System.out.println(ID + " ERROR reading: " + ioe.getMessage());
                 server.remove(ID);

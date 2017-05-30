@@ -31,6 +31,8 @@ public class ClientWindow extends javax.swing.JFrame {
         historyWindow = new HistoryWindow(history);
         historyWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         historyWindow.setVisible(false);
+        messageTextField.setEditable(false);
+        consoleTextArea.setEditable(false);
 
         this.addWindowListener(new WindowListener() {
 
@@ -114,6 +116,11 @@ public class ClientWindow extends javax.swing.JFrame {
                 serverAddressTextFieldActionPerformed(evt);
             }
         });
+        serverAddressTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                serverAddressTextFieldKeyTyped(evt);
+            }
+        });
 
         serverPortLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
         serverPortLabel.setText("Server Port:");
@@ -124,6 +131,11 @@ public class ClientWindow extends javax.swing.JFrame {
         serverPortTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 serverPortTextFieldActionPerformed(evt);
+            }
+        });
+        serverPortTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                serverPortTextFieldKeyTyped(evt);
             }
         });
 
@@ -141,6 +153,11 @@ public class ClientWindow extends javax.swing.JFrame {
         usernameTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usernameTextFieldActionPerformed(evt);
+            }
+        });
+        usernameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                usernameTextFieldKeyTyped(evt);
             }
         });
 
@@ -165,6 +182,11 @@ public class ClientWindow extends javax.swing.JFrame {
         passwordPasswordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passwordPasswordFieldActionPerformed(evt);
+            }
+        });
+        passwordPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                passwordPasswordFieldKeyTyped(evt);
             }
         });
 
@@ -310,43 +332,77 @@ public class ClientWindow extends javax.swing.JFrame {
     // when the connect button is pressed, connect to the server
     // when the disconnect button is pressed, disconnect from the server
     private void connectButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_connectButtonActionPerformed
+
+        // validate user input
+        boolean validated = validateTextField();
+
         // two cases: connect button, disconnect button
         if (connectButton.getText().equals("Connect")) {
-            
-            serverAddress = serverAddressTextField.getText();
-            port = Integer.parseInt(serverPortTextField.getText());
-            
-            if (!serverAddress.isEmpty() && !serverPortTextField.getText().isEmpty()) {
+            if (validated) {
+                serverAddress = serverAddressTextField.getText();
+                port = Integer.parseInt(serverPortTextField.getText());
+
                 try {
-                    client = new Client(this);
-                    clientThread = new Thread(client);
+                    client = new Client(this);  // instantiate a new client attached to this clientWindow instance
+                    clientThread = new Thread(client);  // create a new client thread
                     clientThread.start();
-                    client.send(new Message("test", "testUser", "testContent", "SERVER"));
+                    
+                    client.send(new Message("connect", "requester", "", "SERVER"));
+                    connectButton.setText("Disconnect");
+                    serverAddressTextField.setEditable(false);
+                    serverPortTextField.setEditable(false);
+                    usernameTextField.requestFocus();  // set the cursor to the username textbox after clicking on the connect button
+                    usernameTextField.setEditable(true);
+                    passwordPasswordField.setEditable(true);
+                    messageTextField.setEditable(true);
+
                 } catch (IOException exception) {
                     consoleTextArea.append("[Application -> Me]    Server not found\n");
+                    serverAddressTextField.requestFocus();
                 }
+
+            } else {
+                consoleTextArea.append("[Application -> Me]    User Input Error: Please Re-Enter the Server Address and/or Port Number\n");
+                serverAddressTextField.requestFocus();
+                return;
             }
-            connectButton.setText("Disconnect");
-            
         } else if (connectButton.getText().equals("Disconnect")) {
-            
-            client.clientWindow.loginButton.setEnabled(false);
-            client.clientWindow.registerButton.setEnabled(false);
-            client.clientWindow.usernameTextField.setEnabled(false);
-            client.clientWindow.passwordPasswordField.setEnabled(false);
+
+            loginButton.setEnabled(false);
+            registerButton.setEnabled(false);
+            usernameTextField.setEditable(false);
+            passwordPasswordField.setEditable(false);
+            serverAddressTextField.setEditable(true);
+            serverPortTextField.setEditable(true);
+            messageTextField.setEditable(false);
+
             usernameTextField.setText("");
             passwordPasswordField.setText("");
             connectButton.setText("Connect");
             client.send(new Message("signout", username, ".disconnect", "SERVER"));
         }
-        usernameTextField.requestFocus();  // set the cursor to the username textbox after clicking on the connect button
     }//GEN-LAST:event_connectButtonActionPerformed
+
+    // validate server address text field and server port text field
+    private boolean validateTextField() {
+
+        try {
+            Integer portNumber = Integer.parseInt(serverPortTextField.getText());
+            if (0 <= portNumber && portNumber <= 65535) {
+                return true;
+            } else {
+                return false;  // port number is out-of-bounds (ie. 0-65535)
+            }
+        } catch (NumberFormatException numberFormatException) {
+            return false;
+        }
+    }
 
     // login button
     private void loginButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_loginButtonActionPerformed
         username = usernameTextField.getText();
         password = String.valueOf(passwordPasswordField.getPassword());
-        
+
         if (!username.isEmpty() && !password.isEmpty()) {
             client.send(new Message("login", username, password, "SERVER"));
         }
@@ -361,7 +417,7 @@ public class ClientWindow extends javax.swing.JFrame {
     private void registerButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_registerButtonActionPerformed
         username = usernameTextField.getText();
         password = String.valueOf(passwordPasswordField.getPassword());
-        
+
         if (!username.isEmpty() && !password.isEmpty()) {
             client.send(new Message("register", username, password, "SERVER"));
         }
@@ -400,6 +456,30 @@ public class ClientWindow extends javax.swing.JFrame {
     private void serverAddressTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverAddressTextFieldActionPerformed
         serverPortTextField.requestFocus();
     }//GEN-LAST:event_serverAddressTextFieldActionPerformed
+
+    private void serverPortTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_serverPortTextFieldKeyTyped
+        if (serverPortTextField.getText().length() >= 5) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_serverPortTextFieldKeyTyped
+
+    private void serverAddressTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_serverAddressTextFieldKeyTyped
+        if (serverAddressTextField.getText().length() >= 32) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_serverAddressTextFieldKeyTyped
+
+    private void usernameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextFieldKeyTyped
+        if (usernameTextField.getText().length() >= 32) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_usernameTextFieldKeyTyped
+
+    private void passwordPasswordFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordPasswordFieldKeyTyped
+        if (passwordPasswordField.getText().length() >= 20) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_passwordPasswordFieldKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton clearButton;

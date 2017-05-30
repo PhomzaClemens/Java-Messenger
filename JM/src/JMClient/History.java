@@ -70,9 +70,9 @@ public class History {
     }
 
     // load the history into the table model
-    public void FillTable(HistoryWindow historyFrame) {
+    public void FillTable(HistoryWindow historyWindow) {
 
-        DefaultTableModel model = (DefaultTableModel) historyFrame.historyTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) historyWindow.historyTable.getModel();
 
         try {
             File fXmlFile = new File(filePath);
@@ -96,9 +96,9 @@ public class History {
     }
 
     // write table model data to history XML file
-    public void writeToFile(HistoryWindow historyFrame) {
+    public void writeToFile(HistoryWindow historyWindow) {
 
-        DefaultTableModel model = (DefaultTableModel) historyFrame.historyTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) historyWindow.historyTable.getModel();
 
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();

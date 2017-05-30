@@ -85,7 +85,7 @@ public class Server implements Runnable {
     }
 
     // handle incoming messages
-    public synchronized void handle(int ID, Message msg) {
+    public synchronized void handler(int ID, Message msg) {
         if (msg.content.equals(".disconnect")) {
             Announce("signout", "SERVER", msg.sender);
             remove(ID);
@@ -110,8 +110,8 @@ public class Server implements Runnable {
                     findUserThread(msg.recipient).send(new Message(msg.type, msg.sender, msg.content, msg.recipient));
                     clients[findClient(ID)].send(new Message(msg.type, msg.sender, msg.content, msg.recipient));
                 }
-            } else if (msg.type.equals("test")) {
-                clients[findClient(ID)].send(new Message("test", "SERVER", "OK", msg.sender));
+            } else if (msg.type.equals("connect")) {
+                clients[findClient(ID)].send(new Message("connect", "SERVER", "OK", msg.sender));
             } else if (msg.type.equals("register")) {
                 if (findUserThread(msg.sender) == null) {
                     if (!db.userExists(msg.sender)) {
