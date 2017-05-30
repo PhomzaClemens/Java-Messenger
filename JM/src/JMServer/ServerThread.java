@@ -22,7 +22,7 @@ class ServerThread extends Thread {
     public String username = "";
     public ObjectInputStream streamIn = null;
     public ObjectOutputStream streamOut = null;
-    public ServerWindow ui;
+    public ServerWindow serverWindow;
 
     // constructor
     public ServerThread(Server _server, Socket _socket) {
@@ -30,7 +30,7 @@ class ServerThread extends Thread {
         server = _server;
         socket = _socket;
         ID = socket.getPort();
-        ui = _server.ui;
+        serverWindow = _server.serverWindow;
     }
 
     // send a message
@@ -50,7 +50,7 @@ class ServerThread extends Thread {
 
     @SuppressWarnings("deprecation")
     public void run() {
-        ui.jTextArea1.append("\nServer Thread " + ID + " running.");
+        serverWindow.jTextArea1.append("\nServer Thread " + ID + " running.");
         while (true) {
             try {
                 Message msg = (Message) streamIn.readObject();

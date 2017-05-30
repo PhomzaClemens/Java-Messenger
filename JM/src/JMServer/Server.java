@@ -8,54 +8,54 @@ public class Server implements Runnable {
     public ServerThread clients[];
     public ServerSocket server = null;
     public Thread thread = null;
-    public int clientCount = 0, port = 9000;
-    public ServerWindow ui;
+    public int clientCount = 0, port = 9000, MAX_THREAD = 50;
+    public ServerWindow serverWindow;
     public Database db;
 
     // constructor
-    public Server(ServerWindow serverWindow) {
+    public Server(ServerWindow _serverWindow) {
 
-        clients = new ServerThread[50];
-        ui = serverWindow;
-        db = new Database(ui.filePath);
+        clients = new ServerThread[MAX_THREAD];
+        serverWindow = _serverWindow;
+        db = new Database(serverWindow.filePath);
 
         try {
             server = new ServerSocket(port);
             port = server.getLocalPort();
-            ui.jTextArea1.append("Server running... IP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort());
+            serverWindow.jTextArea1.append("Server running... IP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort());
             start();
         } catch (IOException ioe) {
-            ui.jTextArea1.append("Cannot bind to port: " + port + "\nRetrying");
-            ui.RetryStart(0);
+            serverWindow.jTextArea1.append("Cannot bind to port: " + port + "\nRetrying");
+            serverWindow.RetryStart(0);
         }
     }
 
     // constructor
-    public Server(ServerWindow serverWindow, int Port) {
+    public Server(ServerWindow _serverWindow, int _port) {
 
-        clients = new ServerThread[50];
-        ui = serverWindow;
-        port = Port;
-        db = new Database(ui.filePath);
+        clients = new ServerThread[MAX_THREAD];
+        serverWindow = _serverWindow;
+        port = _port;
+        db = new Database(serverWindow.filePath);
 
         try {
             server = new ServerSocket(port);
             port = server.getLocalPort();
-            ui.jTextArea1.append("Server running... IP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort());
+            serverWindow.jTextArea1.append("Server running... IP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort());
             start();
         } catch (IOException ioe) {
-            ui.jTextArea1.append("\nCannot bind to port " + port + ": " + ioe.getMessage());
+            serverWindow.jTextArea1.append("\nCannot bind to port " + port + ": " + ioe.getMessage());
         }
     }
 
     public void run() {
         while (thread != null) {
             try {
-                ui.jTextArea1.append("\nWaiting for a client...");
+                serverWindow.jTextArea1.append("\nWaiting for a client...");
                 addThread(server.accept());
             } catch (Exception ioe) {
-                ui.jTextArea1.append("\nServer accept error: \n");
-                ui.RetryStart(0);
+                serverWindow.jTextArea1.append("\nServer accept error: \n");
+                serverWindow.RetryStart(0);
             }
         }
     }
@@ -158,7 +158,7 @@ public class Server implements Runnable {
         int pos = findClient(ID);
         if (pos >= 0) {
             ServerThread toTerminate = clients[pos];
-            ui.jTextArea1.append("\nRemoving client thread " + ID + " at " + pos);
+            serverWindow.jTextArea1.append("\nRemoving client thread " + ID + " at " + pos);
             if (pos < clientCount - 1) {
                 for (int i = pos + 1; i < clientCount; i++) {
                     clients[i - 1] = clients[i];
@@ -168,7 +168,7 @@ public class Server implements Runnable {
             try {
                 toTerminate.close();
             } catch (IOException ioe) {
-                ui.jTextArea1.append("\nError closing thread: " + ioe);
+                serverWindow.jTextArea1.append("\nError closing thread: " + ioe);
             }
             toTerminate.interrupt();
         }
@@ -176,17 +176,17 @@ public class Server implements Runnable {
 
     private void addThread(Socket socket) {
         if (clientCount < clients.length) {
-            ui.jTextArea1.append("\nClient accepted: " + socket);
+            serverWindow.jTextArea1.append("\nClient accepted: " + socket);
             clients[clientCount] = new ServerThread(this, socket);
             try {
                 clients[clientCount].open();
                 clients[clientCount].start();
                 clientCount++;
             } catch (IOException ioe) {
-                ui.jTextArea1.append("\nError opening thread: " + ioe);
+                serverWindow.jTextArea1.append("\nError opening thread: " + ioe);
             }
         } else {
-            ui.jTextArea1.append("\nClient refused: maximum " + clients.length + " reached.");
+            serverWindow.jTextArea1.append("\nClient refused: maximum " + clients.length + " reached.");
         }
     }
 }
