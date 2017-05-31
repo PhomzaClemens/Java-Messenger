@@ -1,4 +1,4 @@
-package JMClient;
+package JMServer;
 
 import JMClient.HistoryWindow;
 import java.io.*;
@@ -22,6 +22,7 @@ public class History {
 
     // constructor
     public History() {
+        filePath = null;
     }
     
     // constructor
@@ -33,10 +34,12 @@ public class History {
     public void addMessage(Message msg, String time) {
 
         try {
+            //create document builder factory
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(filePath);
 
+            // 
             Node data = doc.getFirstChild();
 
             Element message = doc.createElement("message");

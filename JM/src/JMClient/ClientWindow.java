@@ -1,5 +1,6 @@
 package JMClient;
 
+import JMClient.History;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.DefaultListModel;
@@ -31,6 +32,7 @@ public class ClientWindow extends javax.swing.JFrame {
         historyWindow = new HistoryWindow(history);
         historyWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         historyWindow.setVisible(false);
+        historyButton.setEnabled(false);
         messageTextField.setEditable(false);
         consoleTextArea.setEditable(false);
 
@@ -333,10 +335,10 @@ public class ClientWindow extends javax.swing.JFrame {
     // when the disconnect button is pressed, disconnect from the server
     private void connectButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_connectButtonActionPerformed
 
-        // validate user input
+        // validate the user input
         boolean validated = validateTextField();
 
-        // two cases: connect button, disconnect button
+        // two cases for each time the button is pressed: connect button, disconnect button
         if (connectButton.getText().equals("Connect")) {
             if (validated) {
                 serverAddress = serverAddressTextField.getText();
@@ -346,7 +348,7 @@ public class ClientWindow extends javax.swing.JFrame {
                     client = new Client(this);  // instantiate a new client attached to this clientWindow instance
                     clientThread = new Thread(client);  // create a new client thread
                     clientThread.start();
-                    
+
                     client.send(new Message("connect", "requester", "", "SERVER"));
                     connectButton.setText("Disconnect");
                     serverAddressTextField.setEditable(false);
@@ -355,31 +357,40 @@ public class ClientWindow extends javax.swing.JFrame {
                     usernameTextField.setEditable(true);
                     passwordPasswordField.setEditable(true);
                     messageTextField.setEditable(true);
+                    historyButton.setEnabled(true);
+                    clearButton.setEnabled(true);
 
                 } catch (IOException exception) {
                     consoleTextArea.append("[Application -> Me]    Server not found\n");
                     serverAddressTextField.requestFocus();
                 }
 
-            } else {
+            } else if (!validated) {
+                // ask the user to enter a valid server address and port number
                 consoleTextArea.append("[Application -> Me]    User Input Error: Please Re-Enter the Server Address and/or Port Number\n");
                 serverAddressTextField.requestFocus();
                 return;
             }
         } else if (connectButton.getText().equals("Disconnect")) {
 
-            loginButton.setEnabled(false);
-            registerButton.setEnabled(false);
-            usernameTextField.setEditable(false);
-            passwordPasswordField.setEditable(false);
+            // send a signout message to the server
+            client.send(new Message("signout", username, ".disconnect", "SERVER"));
+            
+            // set properties for clientWindow's objects
             serverAddressTextField.setEditable(true);
             serverPortTextField.setEditable(true);
-            messageTextField.setEditable(false);
-
-            usernameTextField.setText("");
-            passwordPasswordField.setText("");
             connectButton.setText("Connect");
-            client.send(new Message("signout", username, ".disconnect", "SERVER"));
+            historyButton.setEnabled(false);
+            
+            usernameTextField.setEditable(false);
+            usernameTextField.setText("");
+            passwordPasswordField.setEditable(false);
+            passwordPasswordField.setText("");
+            loginButton.setEnabled(false);
+            registerButton.setEnabled(false);
+            
+            messageTextField.setEditable(false);
+            clearButton.setEnabled(false);
         }
     }//GEN-LAST:event_connectButtonActionPerformed
 
@@ -425,11 +436,11 @@ public class ClientWindow extends javax.swing.JFrame {
 
     private void messageTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageTextFieldActionPerformed
         String message = messageTextField.getText();
-        String target = userList.getSelectedValue().toString();
+        String recipient = userList.getSelectedValue().toString();
 
-        if (!message.isEmpty() && !target.isEmpty()) {
+        if (!message.isEmpty() && !recipient.isEmpty()) {
             messageTextField.setText("");
-            client.send(new Message("message", username, message, target));
+            client.send(new Message("message", username, message, recipient));
         }
     }//GEN-LAST:event_messageTextFieldActionPerformed
 

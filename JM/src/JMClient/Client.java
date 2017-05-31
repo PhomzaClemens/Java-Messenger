@@ -10,12 +10,22 @@ import javax.swing.DefaultListModel;
 
 public class Client implements Runnable {
 
+    // server address and port
+    // these variables contain the address and port number of the computer, or server, you're trying to connect to
     public String serverAddress;
     public int port;
+    
+    // server socket
     public Socket socket;
+    
+    // I/O stream
     public ObjectInputStream streamIn;
     public ObjectOutputStream streamOut;
+    
+    // history object
     public History history;
+    
+    // chat window for the client application
     public ClientWindow clientWindow;
 
     // constructor
@@ -37,7 +47,7 @@ public class Client implements Runnable {
         history = clientWindow.history;
     }
 
-    // code executed in the thread
+    // code executed in a thread while running
     @Override
     public void run() {
         boolean isRunning = true;
@@ -157,7 +167,7 @@ public class Client implements Runnable {
         return true;
     }
 
-    // send a message
+    // sends a message
     public void send(Message message) {
         try {
             streamOut.writeObject(message);  // send the message

@@ -12,34 +12,36 @@ import java.net.Socket;
 
 /**
  *
- * @author macbookpro
+ * @author David Kim
  */
 class ServerThread extends Thread {
 
-    public Server server = null;
-    public Socket socket = null;
+    public Server server;
+    public Socket socket;
     public int ID = -1;
-    public String username = "";
-    public ObjectInputStream streamIn = null;
-    public ObjectOutputStream streamOut = null;
+    public String username;
+    public ObjectInputStream streamIn;
+    public ObjectOutputStream streamOut;
     public ServerWindow serverWindow;
 
     // constructor
     public ServerThread(Server _server, Socket _socket) {
-        super();
+        
+        super();  // calls Thread's constructor
         server = _server;
         socket = _socket;
-        ID = socket.getPort();
+        ID = _socket.getPort();
         serverWindow = _server.serverWindow;
     }
 
-    // send a message
-    public void send(Message msg) {
+    // send a message to the client
+    public void send(Message outgoingMessage) {
+        
         try {
-            streamOut.writeObject(msg);
+            streamOut.writeObject(outgoingMessage);  // the method writeObject is used to send an object to the stream
             streamOut.flush();
         } catch (IOException exception) {
-            System.out.println("Exception [SocketClient    send(...)]");
+            System.out.println("Exception ServerThread.send()");
         }
     }
 
@@ -48,29 +50,31 @@ class ServerThread extends Thread {
         return ID;
     }
 
+    // this method gets called after this thread is started
     @SuppressWarnings("deprecation")
     public void run() {
-        serverWindow.jTextArea1.append("\nServer Thread " + ID + " running.");
-        while (true) {
+        
+        serverWindow.consoleTextArea.append("\nServer Thread " + ID + " running.");
+        while (true) {  // continually listen for incoming messages from the client
             try {
-                Message msg = (Message) streamIn.readObject();
-                server.handler(ID, msg);
+                Message incomingMessage = (Message) streamIn.readObject();  // the method readObject is used to read an object from the stream
+                server.handler(ID, incomingMessage);  // pass the incoming message object to server's handler
             } catch (Exception ioe) {
                 System.out.println(ID + " ERROR reading: " + ioe.getMessage());
-                server.remove(ID);
-                stop();
+                server.remove(ID);  // remove the client from the server
+                interrupt();  // terminate this thread
             }
         }
     }
 
     // open I/O streams
-    public void open() throws IOException {
+    public void openStreams() throws IOException {
         streamOut = new ObjectOutputStream(socket.getOutputStream());
         streamOut.flush();
         streamIn = new ObjectInputStream(socket.getInputStream());
     }
 
-    // socket and I/O streams
+    // close the socket and I/O streams
     public void close() throws IOException {
         if (socket != null) {
             socket.close();

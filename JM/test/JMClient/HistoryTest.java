@@ -5,6 +5,7 @@
  */
 package JMClient;
 
+import JMClient.History;
 import JMServer.Message;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
