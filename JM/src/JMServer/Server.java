@@ -17,7 +17,7 @@ public class Server implements Runnable {
 
         clients = new ServerThread[MAX_THREAD];
         serverWindow = _serverWindow;
-        db = new Database(serverWindow.filePath);
+        db = new Database(serverWindow.dbFilePath);
 
         try {
             server = new ServerSocket(port);
@@ -36,7 +36,7 @@ public class Server implements Runnable {
         clients = new ServerThread[MAX_THREAD];
         serverWindow = _serverWindow;
         port = _port;
-        db = new Database(serverWindow.filePath);
+        db = new Database(serverWindow.dbFilePath);
 
         try {
             server = new ServerSocket(port);

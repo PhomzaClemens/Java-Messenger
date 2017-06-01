@@ -8,7 +8,7 @@ public class ServerWindow extends javax.swing.JFrame {
 
     public Server server;
     public Thread serverThread;
-    public String filePath;
+    public String dbFilePath;
     public JFileChooser fileChooser;
 
     public ServerWindow() {
@@ -120,12 +120,12 @@ public class ServerWindow extends javax.swing.JFrame {
         File file = fileChooser.getSelectedFile();
 
         if (file != null) {
-            filePath = file.getPath();
+            dbFilePath = file.getPath();
             
             if (this.isWin32()) {
-                filePath = filePath.replace("\\", "/");
+                dbFilePath = dbFilePath.replace("\\", "/");
             }
-            dbFileTextField.setText(filePath);
+            dbFileTextField.setText(dbFilePath);
             startServerButton.setEnabled(true);
         }
     }//GEN-LAST:event_openButtonActionPerformed
