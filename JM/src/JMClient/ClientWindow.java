@@ -5,7 +5,13 @@ import java.awt.event.WindowListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import JMServer.Message;
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 public class ClientWindow extends javax.swing.JFrame {
 
@@ -18,7 +24,6 @@ public class ClientWindow extends javax.swing.JFrame {
     public DefaultListModel model;
     public String historyFile;
     public HistoryWindow historyWindow;
-    public History history;
 
     // constructor
     @SuppressWarnings("OverridableMethodCallInConstructor")
@@ -27,10 +32,10 @@ public class ClientWindow extends javax.swing.JFrame {
         this.setTitle("JMessenger - Client");
         model.addElement("Everyone");
         userList.setSelectedIndex(0);
-        history = new History();
-        historyWindow = new HistoryWindow(history);
+        historyWindow = new HistoryWindow();
         historyWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         historyWindow.setVisible(false);
+        historyButton.setEnabled(false);
         messageTextField.setEditable(false);
         consoleTextArea.setEditable(false);
 
@@ -239,6 +244,11 @@ public class ClientWindow extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
         jLabel1.setText("JMessenger™");
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -343,10 +353,10 @@ public class ClientWindow extends javax.swing.JFrame {
                 port = Integer.parseInt(serverPortTextField.getText());
 
                 try {
-                    client = new Client(this);  // instantiate a new client attached to this clientWindow instance
+                    client = new Client(this, historyWindow);  // instantiate a new client attached to this clientWindow instance
                     clientThread = new Thread(client);  // create a new client thread
                     clientThread.start();
-                    
+
                     client.send(new Message("connect", "requester", "", "SERVER"));
                     connectButton.setText("Disconnect");
                     serverAddressTextField.setEditable(false);
@@ -447,6 +457,7 @@ public class ClientWindow extends javax.swing.JFrame {
     private void historyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyButtonActionPerformed
         historyWindow.setLocation(this.getLocation());
         historyWindow.setVisible(true);
+        requestHistory();
     }//GEN-LAST:event_historyButtonActionPerformed
 
     private void usernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTextFieldActionPerformed
@@ -480,6 +491,31 @@ public class ClientWindow extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_passwordPasswordFieldKeyTyped
+
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        try {
+            Desktop.getDesktop().browse(new URI("https://github.com/kimdj/Java-Messenger"));
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(ClientWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ClientWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jLabel1MouseClicked
+
+    public void historyButtonOn() {
+        historyButton.setEnabled(true);
+    }
+
+    public void historyButtonOff() {
+        historyButton.setEnabled(false);
+    }
+
+    public void requestHistory() {
+        DefaultTableModel model = (DefaultTableModel) historyWindow.historyTable.getModel();
+        model.setRowCount(0);
+        Message outgoingMessage = new Message("history", username, "", "SERVER");
+        client.send(outgoingMessage);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton clearButton;

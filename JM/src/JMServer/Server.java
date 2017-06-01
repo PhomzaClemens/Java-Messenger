@@ -2,6 +2,10 @@ package JMServer;
 
 import java.io.*;
 import java.net.*;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server implements Runnable {
 
@@ -11,6 +15,7 @@ public class Server implements Runnable {
     public int clientCount = 0, port = 9000, MAX_THREAD = 50;
     public ServerWindow serverWindow;
     public Database db;
+    public History history;
 
     // constructor
     public Server(ServerWindow _serverWindow) {
@@ -18,6 +23,7 @@ public class Server implements Runnable {
         clients = new ServerThread[MAX_THREAD];
         serverWindow = _serverWindow;
         db = new Database(serverWindow.dbFilePath);
+        history = new History(this);
 
         try {
             server = new ServerSocket(port);
@@ -85,7 +91,7 @@ public class Server implements Runnable {
     }
 
     // handle incoming messages
-    public synchronized void handler(int ID, Message msg) {
+    public synchronized void handler(int ID, Message msg) throws IOException {
         if (msg.content.equals(".disconnect")) {
             Announce("signout", "SERVER", msg.sender);
             remove(ID);
@@ -104,6 +110,7 @@ public class Server implements Runnable {
                     clients[findClient(ID)].send(new Message("login", "SERVER", "FALSE", msg.sender));
                 }
             } else if (msg.type.equals("message")) {
+                history.addMessage(msg, timeStamp(), msg.sender);
                 if (msg.recipient.equals("Everyone")) {
                     Announce("message", msg.sender, msg.content);
                 } else {
@@ -121,12 +128,15 @@ public class Server implements Runnable {
                         clients[findClient(ID)].send(new Message("login", "SERVER", "TRUE", msg.sender));
                         Announce("newuser", "SERVER", msg.sender);
                         SendUserList(msg.sender);
+                        history.addNewUser(msg.sender);
                     } else {
                         clients[findClient(ID)].send(new Message("register", "SERVER", "FALSE", msg.sender));
                     }
                 } else {
                     clients[findClient(ID)].send(new Message("register", "SERVER", "FALSE", msg.sender));
                 }
+            } else if (msg.type.equals("history")) {
+                history.sendHistory(msg.sender);
             }
         }
     }
@@ -188,5 +198,10 @@ public class Server implements Runnable {
         } else {
             serverWindow.consoleTextArea.append("\nClient refused: maximum " + clients.length + " reached.");
         }
+    }
+
+    // get the current time stamp
+    public String timeStamp() {
+        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());
     }
 }

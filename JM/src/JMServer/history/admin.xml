@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<data>
+<message>
+    <sender>admin</sender>
+    <content>hey guys, this is a test message from admin! :-)</content>
+    <recipient>Everyone</recipient>
+    <time>6/1/17 3:54 PM</time>
+  </message>
+</data>

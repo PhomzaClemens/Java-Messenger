@@ -15,13 +15,14 @@ public class Client implements Runnable {
     public Socket socket;
     public ObjectInputStream streamIn;
     public ObjectOutputStream streamOut;
-    public History history;
+    public HistoryWindow historyWindow;
     public ClientWindow clientWindow;
 
     // constructor
-    public Client(ClientWindow _clientWindow) throws IOException {
+    public Client(ClientWindow _clientWindow, HistoryWindow _historyWindow) throws IOException {
 
         clientWindow = _clientWindow;
+        historyWindow = _historyWindow;
         serverAddress = clientWindow.serverAddress;
         port = clientWindow.port;
 
@@ -34,7 +35,7 @@ public class Client implements Runnable {
         streamIn = new ObjectInputStream(socket.getInputStream());
 
         // get a copy of the history object
-        history = clientWindow.history;
+        //history = clientWindow.history;
     }
 
     // code executed in the thread
@@ -43,6 +44,7 @@ public class Client implements Runnable {
         boolean isRunning = true;
         while (isRunning) {
             isRunning = clientWindowHandler();
+            //history.updateHistoryWindow(clientWindow.username);
         }
     }
 
@@ -71,9 +73,9 @@ public class Client implements Runnable {
                     String messageTime = new Date().toString();
 
                     try {
-                        history.addMessage(message, messageTime);
-                        DefaultTableModel table = (DefaultTableModel) clientWindow.historyWindow.historyTable.getModel();
-                        table.addRow(new Object[]{message.sender, message.content, "Me", messageTime});
+//                        history.addMessage(message, messageTime);
+//                        DefaultTableModel table = (DefaultTableModel) clientWindow.historyWindow.historyTable.getModel();
+//                        table.addRow(new Object[]{message.sender, message.content, "Me", messageTime});
                     } catch (Exception exception) {
                     }
                 }
@@ -85,6 +87,7 @@ public class Client implements Runnable {
                     clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Successful\n");
                     clientWindow.usernameTextField.setEnabled(false);
                     clientWindow.passwordPasswordField.setEnabled(false);
+                    clientWindow.historyButtonOn();
                 } else {
                     clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Failed\n");
                 }
@@ -123,6 +126,7 @@ public class Client implements Runnable {
                     clientWindow.clearButton.setEnabled(false);
                     clientWindow.serverAddressTextField.setEditable(true);
                     clientWindow.serverPortTextField.setEditable(true);
+                    clientWindow.historyButtonOff();
 
                     for (int i = 1; i < userlistUI.size(); i++) {
                         userlistUI.removeElementAt(i);
@@ -134,6 +138,8 @@ public class Client implements Runnable {
                     userlistUI.removeElement(message.content);
                     clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Everyone]    " + message.content + " has signed out\n");
                 }
+            } else if (message.type.equals("history")) {  // history
+                historyWindow.addTableEntry(message.sender, message.content, message.recipient, timeStamp());
             } else {  // unknown message
                 clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Unknown message type\n");
             }
@@ -163,17 +169,6 @@ public class Client implements Runnable {
             streamOut.writeObject(message);  // send the message
             streamOut.flush();
             System.out.println("Outgoing: " + message.toString());
-
-            // if the message type is a message, add it to the history module
-            if (message.type.equals("message") && !message.content.equals(".disconnect")) {
-                String messageTime = (new Date()).toString();
-                try {
-                    history.addMessage(message, messageTime);
-                    DefaultTableModel table = (DefaultTableModel) clientWindow.historyWindow.historyTable.getModel();
-                    table.addRow(new Object[]{"Me", message.content, message.recipient, messageTime});
-                } catch (Exception exception) {
-                }
-            }
         } catch (IOException exception) {
             System.out.println("Exception Client.send() ");
         }
