@@ -50,7 +50,7 @@ class ServerThread extends Thread {
 
     @SuppressWarnings("deprecation")
     public void run() {
-        serverWindow.jTextArea1.append("\nServer Thread " + ID + " running.");
+        serverWindow.consoleTextArea.append("\nServer Thread " + ID + " running.");
         while (true) {
             try {
                 Message msg = (Message) streamIn.readObject();

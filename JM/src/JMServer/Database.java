@@ -1,5 +1,5 @@
 package JMServer;
-// TEST
+
 import java.io.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,7 +15,7 @@ import org.xml.sax.SAXException;
 
 public class Database {
 
-    public String filePath;
+    public String filePath;  // file path for 'Database.xml'
 
     // constructor
     public Database(String filePath) {
