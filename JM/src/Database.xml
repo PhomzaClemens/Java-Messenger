@@ -12,4 +12,8 @@
     <username>admin</username>
     <password>password</password>
   </user>
+<user>
+    <username>new user</username>
+    <password>blah</password>
+  </user>
 </data>

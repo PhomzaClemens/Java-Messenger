@@ -5,25 +5,28 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 public class ServerWindow extends javax.swing.JFrame {
-
-    public Server server;
-    public Thread serverThread;
-    public String dbFilePath;
-    public JFileChooser fileChooser;
-
+    
+    public Server server = null;
+    public Thread serverThread = null;
+    public String dbFilePath = "";
+    public JFileChooser fileChooser = null;
+    
     public ServerWindow() {
         initComponents();
+        
         dbFileTextField.setEditable(false);
         dbFileTextField.setBackground(Color.WHITE);
-
+        
         fileChooser = new JFileChooser();
         consoleTextArea.setEditable(false);
     }
 
+    // checks to see if we're dealing with a Windows Operating System
     public boolean isWin32() {
         return System.getProperty("os.name").startsWith("Windows");
     }
 
+    // initializes all of the Java swing components objects that the front-end GUI uses (NetBeans GUI Builder)
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -101,11 +104,20 @@ public class ServerWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startServerButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_startServerButtonActionPerformed
-        server = new Server(this);
-        startServerButton.setEnabled(false);
-        openButton.setEnabled(false);
+        
+        if (startServerButton.getText().equals("Start Server")) {
+            server = new Server(this);
+            openButton.setEnabled(false);
+            startServerButton.setText("Stop Server");
+        } else if (startServerButton.getText().equals("Stop Server")) {
+            server.stop();
+            openButton.setEnabled(true);
+            startServerButton.setText("Start Server");
+            consoleTextArea.append("Server stopped running.");
+        }
+        
     }//GEN-LAST:event_startServerButtonActionPerformed
-
+    
     public void RetryStart(int port) {
         if (server != null) {
             server.stop();
@@ -118,7 +130,7 @@ public class ServerWindow extends javax.swing.JFrame {
         fileChooser.setCurrentDirectory(workingDirectory);
         fileChooser.showDialog(this, "Open");
         File file = fileChooser.getSelectedFile();
-
+        
         if (file != null) {
             dbFilePath = file.getPath();
             
@@ -138,4 +150,14 @@ public class ServerWindow extends javax.swing.JFrame {
     private javax.swing.JButton openButton;
     private javax.swing.JButton startServerButton;
     // End of variables declaration//GEN-END:variables
+
+    public static void main(String args[]) {
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ServerWindow().setVisible(true);
+            }
+        });
+    }
+    
 }

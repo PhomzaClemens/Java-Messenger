@@ -21,12 +21,11 @@ import java.util.logging.Logger;
 
 public class History {
 
-    public String filePath;
-    public Server server;
+    public String filePath = null;
+    public Server server = null;
 
     // constructor
     public History(Server _server) {
-        filePath = null;
         server = _server;
     }
 
@@ -157,6 +156,7 @@ public class History {
                     //System.out.println("ELEMENT: " + message[0] + " -- " + message[1] + " -- " + message[2] + " -- " + message[3] + "\n");
 
                     Message outgoingMessage = new Message("history", message[0].toString(), message[1].toString(), message[2].toString());
+                    outgoingMessage.setTimeStamp(message[3].toString());
                     server.findUserThread(username).send(outgoingMessage);
                 }
             }

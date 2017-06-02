@@ -18,11 +18,13 @@ class ServerThread extends Thread {
 
     public Server server = null;
     public Socket socket = null;
-    public int ID = -1;
-    public String username = "";
     public ObjectInputStream streamIn = null;
     public ObjectOutputStream streamOut = null;
-    public ServerWindow serverWindow;
+    
+    public int ID = -1;
+    public String username = "";
+    
+    public ServerWindow serverWindow = null;
 
     // constructor
     public ServerThread(Server _server, Socket _socket) {
@@ -34,9 +36,9 @@ class ServerThread extends Thread {
     }
 
     // send a message
-    public void send(Message msg) {
+    public void send(Message message) {
         try {
-            streamOut.writeObject(msg);
+            streamOut.writeObject(message);
             streamOut.flush();
         } catch (IOException exception) {
             System.out.println("Exception [SocketClient    send(...)]");
@@ -49,16 +51,17 @@ class ServerThread extends Thread {
     }
 
     @SuppressWarnings("deprecation")
+    @Override
     public void run() {
-        serverWindow.consoleTextArea.append("\nServer Thread " + ID + " running.");
+        serverWindow.consoleTextArea.append("Server Thread " + ID + " running.\n");
         while (true) {
             try {
-                Message msg = (Message) streamIn.readObject();
-                server.handler(ID, msg);
-            } catch (Exception ioe) {
-                System.out.println(ID + " ERROR reading: " + ioe.getMessage());
+                Message message = (Message) streamIn.readObject();
+                server.handler(ID, message);
+            } catch (IOException | ClassNotFoundException exception) {
+                System.out.println(ID + " ERROR reading: " + exception.getMessage());
                 server.remove(ID);
-                stop();
+                interrupt();
             }
         }
     }
