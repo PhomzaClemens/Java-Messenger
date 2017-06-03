@@ -5,13 +5,17 @@ import java.awt.event.WindowListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import JMServer.Message;
+import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Image;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultCaret;
 
 public class ClientWindow extends javax.swing.JFrame {
 
@@ -24,6 +28,8 @@ public class ClientWindow extends javax.swing.JFrame {
 
     public DefaultListModel model = null;
     public HistoryWindow historyWindow = null;
+
+    int secretButtonColorIndex = 0;
 
     // constructor
     @SuppressWarnings("OverridableMethodCallInConstructor")
@@ -38,6 +44,10 @@ public class ClientWindow extends javax.swing.JFrame {
         historyWindow.setVisible(false);
         messageTextField.setEditable(false);
         consoleTextArea.setEditable(false);
+
+        // make the console window scroll to the bottom as its default behavior
+        DefaultCaret caret = (DefaultCaret) consoleTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         this.addWindowListener(new WindowListener() {
 
@@ -107,6 +117,7 @@ public class ClientWindow extends javax.swing.JFrame {
         loginButton = new javax.swing.JButton();
         historyButton = new javax.swing.JButton();
         JMessengerLabel = new javax.swing.JLabel();
+        secretLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(820, 470));
@@ -250,6 +261,15 @@ public class ClientWindow extends javax.swing.JFrame {
             }
         });
 
+        secretLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        secretLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/JMClient/iTunesArtwork@2x.png"))); // NOI18N
+        secretLabel.setText(" ");
+        secretLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                secretLabelMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -257,15 +277,14 @@ public class ClientWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(serverAddressLabel)
-                            .addComponent(usernameLabel))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(secretLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(usernameLabel)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(serverAddressTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
@@ -278,7 +297,7 @@ public class ClientWindow extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(serverPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                                .addGap(10, 10, 10)
                                 .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -291,7 +310,7 @@ public class ClientWindow extends javax.swing.JFrame {
                                 .addComponent(historyButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(JMessengerLabel)))
-                        .addGap(4, 4, 4))
+                        .addGap(10, 10, 10))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(msgLabel)
@@ -299,8 +318,15 @@ public class ClientWindow extends javax.swing.JFrame {
                         .addComponent(messageTextField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)))
-                .addContainerGap())
+                        .addGap(12, 12, 12))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,13 +347,14 @@ public class ClientWindow extends javax.swing.JFrame {
                     .addComponent(usernameLabel)
                     .addComponent(registerButton)
                     .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(loginButton))
+                    .addComponent(loginButton)
+                    .addComponent(secretLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clearButton)
@@ -352,7 +379,7 @@ public class ClientWindow extends javax.swing.JFrame {
             if (validated) {
                 serverAddress = serverAddressTextField.getText();
                 port = Integer.parseInt(serverPortTextField.getText());
-                
+
                 try {
                     client = new Client(this, historyWindow);  // instantiate a new client attached to this clientWindow instance
                     clientThread = new Thread(client);  // create a new client thread
@@ -365,6 +392,8 @@ public class ClientWindow extends javax.swing.JFrame {
                     connectButton.setText("Disconnect");
                     serverAddressTextField.setEditable(false);
                     serverPortTextField.setEditable(false);
+                    serverAddressTextField.setEnabled(false);
+                    serverPortTextField.setEnabled(false);
                     usernameTextField.requestFocus();  // set the cursor to the username textbox after clicking on the connect button
                     usernameTextField.setEditable(true);
                     passwordPasswordField.setEditable(true);
@@ -385,7 +414,7 @@ public class ClientWindow extends javax.swing.JFrame {
 
             // send a signout message to the server
             client.send(new Message("signout", username, ".disconnect", "SERVER"));
-            
+
             // update GUI elements
             loginButton.setEnabled(false);
             registerButton.setEnabled(false);
@@ -393,6 +422,8 @@ public class ClientWindow extends javax.swing.JFrame {
             passwordPasswordField.setEditable(false);
             serverAddressTextField.setEditable(true);
             serverPortTextField.setEditable(true);
+            serverAddressTextField.setEnabled(true);
+            serverPortTextField.setEnabled(true);
             messageTextField.setEditable(false);
             clearButton.setEnabled(false);
 
@@ -419,7 +450,7 @@ public class ClientWindow extends javax.swing.JFrame {
 
     // login button
     private void loginButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_loginButtonActionPerformed
-        
+
         // get the username and password from the text fields
         username = usernameTextField.getText();
         password = String.valueOf(passwordPasswordField.getPassword());
@@ -428,7 +459,7 @@ public class ClientWindow extends javax.swing.JFrame {
         if (!username.isEmpty() && !password.isEmpty()) {
             client.send(new Message("login", username, password, "SERVER"));
         }
-        
+
         messageTextField.requestFocus();
     }//GEN-LAST:event_loginButtonActionPerformed
 
@@ -438,7 +469,7 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_registerButtonActionPerformed
-        
+
         // get the username and password from the text fields
         username = usernameTextField.getText();
         password = String.valueOf(passwordPasswordField.getPassword());
@@ -450,7 +481,7 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void messageTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageTextFieldActionPerformed
-        
+
         // get the message and recipient from the GUI elements
         String message = messageTextField.getText();
         String recipient = userList.getSelectedValue().toString();
@@ -487,7 +518,7 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_serverAddressTextFieldActionPerformed
 
     private void serverPortTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_serverPortTextFieldKeyTyped
-        
+
         // limit user input
         if (serverPortTextField.getText().length() >= 5) {
             evt.consume();
@@ -495,7 +526,7 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_serverPortTextFieldKeyTyped
 
     private void serverAddressTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_serverAddressTextFieldKeyTyped
-        
+
         // limit user input
         if (serverAddressTextField.getText().length() >= 32) {
             evt.consume();
@@ -503,7 +534,7 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_serverAddressTextFieldKeyTyped
 
     private void usernameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextFieldKeyTyped
-        
+
         // limit user input
         if (usernameTextField.getText().length() >= 32) {
             evt.consume();
@@ -511,7 +542,7 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameTextFieldKeyTyped
 
     private void passwordPasswordFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordPasswordFieldKeyTyped
-        
+
         // limit user input
         if (passwordPasswordField.getText().length() >= 20) {
             evt.consume();
@@ -519,7 +550,7 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordPasswordFieldKeyTyped
 
     private void JMessengerLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMessengerLabelMouseClicked
-        
+
         // go to JMessenger's GitHub repository
         try {
             Desktop.getDesktop().browse(new URI("https://github.com/kimdj/Java-Messenger"));
@@ -529,6 +560,35 @@ public class ClientWindow extends javax.swing.JFrame {
             Logger.getLogger(ClientWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JMessengerLabelMouseClicked
+
+    // change background color
+    private void secretLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_secretLabelMouseClicked
+
+        switch (secretButtonColorIndex) {
+            case 0:
+                getContentPane().setBackground(Color.decode("#FFFFCC"));
+                secretButtonColorIndex = 1;
+                break;
+            case 1:
+                getContentPane().setBackground(Color.decode("#FFCCE5"));  // light pink
+                secretButtonColorIndex = 2;
+                break;
+            case 2:
+                getContentPane().setBackground(Color.decode("#99FFCC"));  // light green
+                secretButtonColorIndex = 3;
+                break;
+            case 3:
+                getContentPane().setBackground(Color.decode("#FFFFFF"));  // white
+                secretButtonColorIndex = 4;
+                break;
+            case 4:
+                getContentPane().setBackground(Color.decode("#F6F6F6"));  // light gray
+                secretButtonColorIndex = 0;
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_secretLabelMouseClicked
 
     public void historyButtonOn() {
         historyButton.setEnabled(true);
@@ -565,6 +625,7 @@ public class ClientWindow extends javax.swing.JFrame {
     private javax.swing.JLabel passwordLabel;
     public javax.swing.JPasswordField passwordPasswordField;
     public javax.swing.JButton registerButton;
+    private javax.swing.JLabel secretLabel;
     private javax.swing.JLabel serverAddressLabel;
     public javax.swing.JTextField serverAddressTextField;
     private javax.swing.JLabel serverPortLabel;

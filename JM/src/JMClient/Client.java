@@ -12,10 +12,10 @@ public class Client implements Runnable {
     public Socket socket = null;
     public ObjectInputStream streamIn = null;
     public ObjectOutputStream streamOut = null;
-    
+
     public String serverAddress = "";
     public int port = 9000;
-    
+
     public HistoryWindow historyWindow = null;
     public ClientWindow clientWindow = null;
 
@@ -45,7 +45,7 @@ public class Client implements Runnable {
         boolean isRunning = true;
         while (isRunning) {
             isRunning = handler();
-            
+
         }
     }
 
@@ -71,7 +71,7 @@ public class Client implements Runnable {
                 } else {
                     clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> " + message.recipient + "]    " + message.content + "\n");
                 }
-                
+
                 // update the history window
                 clientWindow.requestHistory();
 
@@ -89,7 +89,7 @@ public class Client implements Runnable {
                     clientWindow.historyButtonOn();
                     clientWindow.setTitle("JMessenger - " + message.recipient);
 
-                // login was unsuccessful
+                    // login was unsuccessful
                 } else if (message.content.equals("FALSE")) {
                     clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Failed\n");
                 }
@@ -128,7 +128,7 @@ public class Client implements Runnable {
                     clientWindow.clearButton.setEnabled(true);
                     clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Successful\n");
 
-                } else if (message.content.equals("FALSE"))  {
+                } else if (message.content.equals("FALSE")) {
                     clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Failed\n");
                 }
 
