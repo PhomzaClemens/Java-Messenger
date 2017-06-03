@@ -16,7 +16,8 @@ public class HistoryWindow extends javax.swing.JFrame {
     // add a message to the table
     public void addTableEntry(String sender, String content, String recipient, String timeStamp) {
         DefaultTableModel model = (DefaultTableModel) this.historyTable.getModel();
-        model.addRow(new Object[]{sender, content, recipient, timeStamp});
+        //model.addRow(new Object[]{sender, content, recipient, timeStamp});
+        model.insertRow(0, new Object[]{sender, content, recipient, timeStamp});
     }
 
     // initializes all of the Java swing components objects that the front-end GUI uses (NetBeans GUI Builder)
@@ -30,6 +31,7 @@ public class HistoryWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Chat History");
 
+        historyTable.setAutoCreateRowSorter(true);
         historyTable.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
         historyTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

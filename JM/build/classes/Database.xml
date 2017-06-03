@@ -16,4 +16,12 @@
     <username>new user</username>
     <password>blah</password>
   </user>
+<user>
+    <username>a</username>
+    <password>a</password>
+  </user>
+<user>
+    <username>b</username>
+    <password>b</password>
+  </user>
 </data>

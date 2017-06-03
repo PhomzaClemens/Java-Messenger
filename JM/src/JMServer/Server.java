@@ -26,14 +26,15 @@ public class Server implements Runnable {
         history = new History(this);
 
         try {
+            port = Integer.parseInt(serverWindow.serverPortTextField.getText());
             server = new ServerSocket(port);
             port = server.getLocalPort();
             start();
 
             serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort() + "\n");
         } catch (IOException ioexception) {
-            serverWindow.consoleTextArea.append("Cannot bind to port: " + port + "\nRetrying...\n");
-            serverWindow.RetryStart(0);
+            serverWindow.consoleTextArea.append("Cannot bind to port " + port + ": " + "Retrying...\n");
+            serverWindow.RetryStart(port);
         }
     }
 
@@ -46,12 +47,13 @@ public class Server implements Runnable {
         db = new Database(serverWindow.dbFilePath);
 
         try {
+            port = Integer.parseInt(serverWindow.serverPortTextField.getText());
             server = new ServerSocket(port);
             port = server.getLocalPort();
-            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort());
+            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort() + "\n");
             start();
         } catch (IOException ioe) {
-            serverWindow.consoleTextArea.append("\nCannot bind to port " + port + ": " + ioe.getMessage());
+            serverWindow.consoleTextArea.append("Cannot bind to port " + port + ": " + ioe.getMessage() + "\n");
         }
     }
 
@@ -65,12 +67,24 @@ public class Server implements Runnable {
     @SuppressWarnings("deprecation")
     public void stop() {
         if (thread != null) {
-            thread.interrupt();
+            thread.stop();
             thread = null;
         }
+
+        ServerThread clients[] = null;
+        ServerSocket server = null;
+        Thread thread = null;
+        Database db = null;
+        History history = null;
+
+        clientCount = 0;
+        port = 9000;
+        MAX_THREAD = 50;
+
+        serverWindow = null;
     }
 
-    // code executed in the thread
+// code executed in the thread
     @Override
     public void run() {
         while (thread != null) {
@@ -96,17 +110,17 @@ public class Server implements Runnable {
 
     // handle incoming messages
     public synchronized void handler(int ID, Message incomingMessage) throws IOException {
-        
+
         // two cases: incoming message is a disconnection request, or not
         if (incomingMessage.content.equals(".disconnect")) {
-            
+
             Announce("signout", "SERVER", incomingMessage.sender);
             remove(ID);
-            
+
         } else {
-            
+
             if (incomingMessage.type.equals("login")) {  // message type: login
-                
+
                 if (findUserThread(incomingMessage.sender) == null) {
                     if (db.checkLogin(incomingMessage.sender, incomingMessage.content)) {
                         clients[findClient(ID)].username = incomingMessage.sender;
@@ -119,9 +133,9 @@ public class Server implements Runnable {
                 } else {
                     clients[findClient(ID)].send(new Message("login", "SERVER", "FALSE", incomingMessage.sender));
                 }
-                
+
             } else if (incomingMessage.type.equals("message")) {  // message type: message
-                
+
                 history.addMessage(incomingMessage, timeStamp(), incomingMessage.sender);
                 if (incomingMessage.recipient.equals("Everyone")) {
                     Announce("message", incomingMessage.sender, incomingMessage.content);
@@ -129,13 +143,13 @@ public class Server implements Runnable {
                     findUserThread(incomingMessage.recipient).send(new Message(incomingMessage.type, incomingMessage.sender, incomingMessage.content, incomingMessage.recipient));
                     clients[findClient(ID)].send(new Message(incomingMessage.type, incomingMessage.sender, incomingMessage.content, incomingMessage.recipient));
                 }
-                
+
             } else if (incomingMessage.type.equals("connect")) {  // message type: connect
-                
+
                 clients[findClient(ID)].send(new Message("connect", "SERVER", "OK", incomingMessage.sender));
-                
+
             } else if (incomingMessage.type.equals("register")) {  // message type: register
-                
+
                 if (findUserThread(incomingMessage.sender) == null) {
                     if (!db.userExists(incomingMessage.sender)) {
                         db.addUser(incomingMessage.sender, incomingMessage.content);
@@ -151,9 +165,9 @@ public class Server implements Runnable {
                 } else {
                     clients[findClient(ID)].send(new Message("register", "SERVER", "FALSE", incomingMessage.sender));
                 }
-                
+
             } else if (incomingMessage.type.equals("history")) {  // message type: history
-                
+
                 history.sendHistory(incomingMessage.sender);
             }
         }
@@ -187,7 +201,7 @@ public class Server implements Runnable {
     // remove a client
     @SuppressWarnings("deprecation")
     public synchronized void remove(int ID) {
-        
+
         int pos = findClient(ID);
         if (pos >= 0) {
             ServerThread toTerminate = clients[pos];
@@ -200,16 +214,17 @@ public class Server implements Runnable {
             clientCount--;
             try {
                 toTerminate.close();
+                System.out.println("CLOSING THREAD");
             } catch (IOException ioexception) {
                 serverWindow.consoleTextArea.append("Error closing thread: " + ioexception + "\n");
             }
-            toTerminate.interrupt();
+            toTerminate.stop();
         }
     }
 
     // add a client thread
     private void addThread(Socket socket) {
-        
+
         if (clientCount < clients.length) {
             serverWindow.consoleTextArea.append("Client accepted: " + socket + "\n");
             clients[clientCount] = new ServerThread(this, socket);

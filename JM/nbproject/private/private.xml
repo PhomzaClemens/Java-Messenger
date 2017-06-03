@@ -4,10 +4,14 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMClient/Client.java</file>
+            <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/Database.java</file>
             <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMClient/ClientWindow.java</file>
             <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMClient/HistoryWindow.java</file>
             <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/History.java</file>
+            <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/Message.java</file>
+            <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/ServerThread.java</file>
             <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/Server.java</file>
+            <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/ServerWindow.java</file>
         </group>
     </open-files>
 </project-private>

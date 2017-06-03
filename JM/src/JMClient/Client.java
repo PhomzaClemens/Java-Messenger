@@ -24,12 +24,14 @@ public class Client implements Runnable {
 
         clientWindow = _clientWindow;
         historyWindow = _historyWindow;
-        
+
         serverAddress = clientWindow.serverAddress;
         port = clientWindow.port;
 
         // creates a stream socket and connect it to the specified port number at the specified IP address
-        socket = new Socket(InetAddress.getByName(serverAddress), port);
+        //socket = new Socket(InetAddress.getByName(serverAddress), port);
+        socket = new Socket();
+        socket.connect(new InetSocketAddress(InetAddress.getByName(serverAddress), port), 5000);  // 5000 millisecond timeout value
 
         // open I/O streams
         streamOut = new ObjectOutputStream(socket.getOutputStream());
@@ -146,7 +148,7 @@ public class Client implements Runnable {
                         userlist.removeElementAt(i);
                     }
 
-                    clientWindow.clientThread.interrupt();
+                    clientWindow.clientThread.stop();
                     return false;
 
                 } else {
@@ -173,7 +175,7 @@ public class Client implements Runnable {
                 userlist.removeElementAt(i);
             }
 
-            clientWindow.clientThread.interrupt();
+            clientWindow.clientThread.stop();
 
             System.out.println("Exception Client.handler()");
             exception.printStackTrace();

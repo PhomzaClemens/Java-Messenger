@@ -49,7 +49,7 @@ public class ClientWindow extends javax.swing.JFrame {
             public void windowClosing(WindowEvent e) {
                 try {
                     client.send(new Message("message", username, ".disconnect", "SERVER"));
-                    clientThread.interrupt();
+                    clientThread.stop();
                 } catch (Exception exception) {
                 }
             }
@@ -270,7 +270,7 @@ public class ClientWindow extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(serverAddressTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
                             .addComponent(usernameTextField))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                        .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(serverPortLabel)
                             .addComponent(passwordLabel))
@@ -280,7 +280,7 @@ public class ClientWindow extends javax.swing.JFrame {
                                 .addComponent(serverPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                                 .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -352,7 +352,7 @@ public class ClientWindow extends javax.swing.JFrame {
             if (validated) {
                 serverAddress = serverAddressTextField.getText();
                 port = Integer.parseInt(serverPortTextField.getText());
-
+                
                 try {
                     client = new Client(this, historyWindow);  // instantiate a new client attached to this clientWindow instance
                     clientThread = new Thread(client);  // create a new client thread
@@ -360,7 +360,7 @@ public class ClientWindow extends javax.swing.JFrame {
 
                     // send a connection request to the server
                     client.send(new Message("connect", "CLIENT", "connection request", "SERVER"));
-                    
+
                     // update GUI elements
                     connectButton.setText("Disconnect");
                     serverAddressTextField.setEditable(false);
@@ -473,9 +473,9 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_serverPortTextFieldActionPerformed
 
     private void historyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyButtonActionPerformed
+        requestHistory();
         historyWindow.setLocation(this.getLocation());
         historyWindow.setVisible(true);
-        requestHistory();
     }//GEN-LAST:event_historyButtonActionPerformed
 
     private void usernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTextFieldActionPerformed

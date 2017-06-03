@@ -12,4 +12,10 @@
     <recipient>Everyone</recipient>
     <time>6/2/17 12:32 PM</time>
   </message>
+<message>
+    <sender>admin</sender>
+    <content>this is a test message</content>
+    <recipient>Everyone</recipient>
+    <time>6/2/17 2:07 PM</time>
+  </message>
 </data>

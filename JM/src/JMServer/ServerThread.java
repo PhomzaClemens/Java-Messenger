@@ -61,7 +61,7 @@ class ServerThread extends Thread {
             } catch (IOException | ClassNotFoundException exception) {
                 System.out.println(ID + " ERROR reading: " + exception.getMessage());
                 server.remove(ID);
-                interrupt();
+                stop();
             }
         }
     }
