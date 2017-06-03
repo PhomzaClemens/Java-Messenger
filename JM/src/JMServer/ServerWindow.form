@@ -28,24 +28,37 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="dbFileLabel" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="databaseFileLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="historyFileLabel" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="dbFileTextField" pref="311" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="openButton" min="-2" pref="99" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="serverPortLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="serverPortTextField" min="-2" pref="54" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="startServerButton" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="historyFileTextField" pref="311" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="openHistoryFileButton" min="-2" pref="99" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="252" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="databaseFileTextField" pref="311" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="openDatabaseFileButton" min="-2" pref="99" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="serverPortLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="serverPortTextField" min="-2" pref="54" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="startServerButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -54,15 +67,21 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="dbFileTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="dbFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="databaseFileTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="databaseFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="startServerButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="serverPortLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="serverPortTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="openButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="openDatabaseFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="historyFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="openHistoryFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="historyFileTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="367" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="334" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -102,7 +121,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="dbFileLabel">
+    <Component class="javax.swing.JLabel" name="databaseFileLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Helvetica Neue" size="13" style="0"/>
@@ -110,14 +129,14 @@
         <Property name="text" type="java.lang.String" value="Database File:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="dbFileTextField">
+    <Component class="javax.swing.JTextField" name="databaseFileTextField">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Helvetica Neue" size="13" style="0"/>
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="openButton">
+    <Component class="javax.swing.JButton" name="openDatabaseFileButton">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Helvetica Neue" size="13" style="0"/>
@@ -125,7 +144,7 @@
         <Property name="text" type="java.lang.String" value="Open"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openDatabaseFileButtonActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="serverPortTextField">
@@ -150,6 +169,34 @@
           <Font name="Helvetica Neue" size="13" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Server Port:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="historyFileLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Helvetica Neue" size="13" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="History File:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="openHistoryFileButton">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Helvetica Neue" size="13" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Open"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openHistoryFileButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="historyFileTextField">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Helvetica Neue" size="13" style="0"/>
+        </Property>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
   </SubComponents>

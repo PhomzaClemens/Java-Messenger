@@ -14,8 +14,8 @@ public class ServerWindow extends javax.swing.JFrame {
     public ServerWindow() {
         initComponents();
 
-        dbFileTextField.setEditable(false);
-        dbFileTextField.setBackground(Color.WHITE);
+        databaseFileTextField.setEditable(false);
+        databaseFileTextField.setBackground(Color.WHITE);
 
         fileChooser = new JFileChooser();
         consoleTextArea.setEditable(false);
@@ -34,11 +34,14 @@ public class ServerWindow extends javax.swing.JFrame {
         startServerButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         consoleTextArea = new javax.swing.JTextArea();
-        dbFileLabel = new javax.swing.JLabel();
-        dbFileTextField = new javax.swing.JTextField();
-        openButton = new javax.swing.JButton();
+        databaseFileLabel = new javax.swing.JLabel();
+        databaseFileTextField = new javax.swing.JTextField();
+        openDatabaseFileButton = new javax.swing.JButton();
         serverPortTextField = new javax.swing.JTextField();
         serverPortLabel = new javax.swing.JLabel();
+        historyFileLabel = new javax.swing.JLabel();
+        openHistoryFileButton = new javax.swing.JButton();
+        historyFileTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Java Messenger - Server");
@@ -58,16 +61,16 @@ public class ServerWindow extends javax.swing.JFrame {
         consoleTextArea.setRows(5);
         jScrollPane1.setViewportView(consoleTextArea);
 
-        dbFileLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
-        dbFileLabel.setText("Database File:");
+        databaseFileLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
+        databaseFileLabel.setText("Database File:");
 
-        dbFileTextField.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
+        databaseFileTextField.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
 
-        openButton.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
-        openButton.setText("Open");
-        openButton.addActionListener(new java.awt.event.ActionListener() {
+        openDatabaseFileButton.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
+        openDatabaseFileButton.setText("Open");
+        openDatabaseFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openButtonActionPerformed(evt);
+                openDatabaseFileButtonActionPerformed(evt);
             }
         });
 
@@ -88,6 +91,21 @@ public class ServerWindow extends javax.swing.JFrame {
         serverPortLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
         serverPortLabel.setText("Server Port:");
 
+        historyFileLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
+        historyFileLabel.setText("History File:");
+
+        openHistoryFileButton.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
+        openHistoryFileButton.setText("Open");
+        openHistoryFileButton.setEnabled(false);
+        openHistoryFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openHistoryFileButtonActionPerformed(evt);
+            }
+        });
+
+        historyFileTextField.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
+        historyFileTextField.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,18 +114,27 @@ public class ServerWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(dbFileLabel)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(databaseFileLabel)
+                            .addComponent(historyFileLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dbFileTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(openButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(serverPortLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(serverPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(startServerButton)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(historyFileTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(openHistoryFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(252, 252, 252))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(databaseFileTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(openDatabaseFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(serverPortLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(serverPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(startServerButton)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -115,14 +142,19 @@ public class ServerWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dbFileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dbFileLabel)
+                    .addComponent(databaseFileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(databaseFileLabel)
                     .addComponent(startServerButton)
                     .addComponent(serverPortLabel)
                     .addComponent(serverPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(openButton))
+                    .addComponent(openDatabaseFileButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(historyFileLabel)
+                    .addComponent(openHistoryFileButton)
+                    .addComponent(historyFileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -134,16 +166,21 @@ public class ServerWindow extends javax.swing.JFrame {
         if (startServerButton.getText().equals("Start Server")) {
             if (validateServerPortTextField()) {
                 server = new Server(this);
-            openButton.setEnabled(false);
-            startServerButton.setText("Stop Server");
+                openDatabaseFileButton.setEnabled(false);
+                startServerButton.setText("Stop Server");
             } else if (!validateServerPortTextField()) {
                 consoleTextArea.append("Please enter a valid port number.\n");
             }
+
+            historyFileTextField.setEnabled(true);
+            openHistoryFileButton.setEnabled(true);
         } else if (startServerButton.getText().equals("Stop Server")) {
             server.stop();
-            openButton.setEnabled(true);
+            openDatabaseFileButton.setEnabled(true);
             startServerButton.setText("Start Server");
             consoleTextArea.append("Server stopped running.\n");
+            historyFileTextField.setEnabled(false);
+            openHistoryFileButton.setEnabled(false);
         }
 
     }//GEN-LAST:event_startServerButtonActionPerformed
@@ -155,7 +192,7 @@ public class ServerWindow extends javax.swing.JFrame {
         server = new Server(this, port);
     }
 
-    private void openButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_openButtonActionPerformed
+    private void openDatabaseFileButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_openDatabaseFileButtonActionPerformed
         File workingDirectory = new File(System.getProperty("user.dir") + "/src");
         fileChooser.setCurrentDirectory(workingDirectory);
         fileChooser.showDialog(this, "Open");
@@ -167,10 +204,10 @@ public class ServerWindow extends javax.swing.JFrame {
             if (this.isWin32()) {
                 dbFilePath = dbFilePath.replace("\\", "/");
             }
-            dbFileTextField.setText(dbFilePath);
+            databaseFileTextField.setText(dbFilePath);
             startServerButton.setEnabled(true);
         }
-    }//GEN-LAST:event_openButtonActionPerformed
+    }//GEN-LAST:event_openDatabaseFileButtonActionPerformed
 
     private void serverPortTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverPortTextFieldActionPerformed
 
@@ -183,6 +220,21 @@ public class ServerWindow extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_serverPortTextFieldKeyTyped
+
+    private void openHistoryFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openHistoryFileButtonActionPerformed
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Open History File");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            server.history.setFilePath(file.getPath() + "/");
+            historyFileTextField.setText(file.getPath() + "/");
+        }
+    }//GEN-LAST:event_openHistoryFileButtonActionPerformed
 
     // validate the server port text field
     private boolean validateServerPortTextField() {
@@ -201,10 +253,13 @@ public class ServerWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTextArea consoleTextArea;
-    private javax.swing.JLabel dbFileLabel;
-    private javax.swing.JTextField dbFileTextField;
+    private javax.swing.JLabel databaseFileLabel;
+    private javax.swing.JTextField databaseFileTextField;
+    private javax.swing.JLabel historyFileLabel;
+    private javax.swing.JTextField historyFileTextField;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton openButton;
+    private javax.swing.JButton openDatabaseFileButton;
+    private javax.swing.JButton openHistoryFileButton;
     private javax.swing.JLabel serverPortLabel;
     public javax.swing.JTextField serverPortTextField;
     private javax.swing.JButton startServerButton;

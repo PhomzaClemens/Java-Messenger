@@ -21,19 +21,24 @@ import java.util.logging.Logger;
 
 public class History {
 
-    public String filePath = null;
+    public String dirPath = null;
     public Server server = null;
 
     // constructor
     public History(Server _server) {
         server = _server;
     }
+    
+    // set the file path
+    public void setFilePath(String _filePath) {
+        dirPath = _filePath;
+    }
 
     // add a message to the history XML file
     public void addMessage(Message msg, String time, String username) {
 
         try {
-            filePath = System.getProperty("user.dir") + "/src/JMServer/history/" + username + ".xml";
+            String filePath = dirPath + username + ".xml";
             File xmlFile = new File(filePath);
 
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -73,9 +78,9 @@ public class History {
                 transformer.transform(source, result);
             } else {
                 //System.out.println("file doesn't exist, create a new file");
-                String defaultPath = System.getProperty("user.dir") + "/src/JMServer/history/DEFAULT.xml";
+                String defaultPath = dirPath + "DEFAULT.xml";
                 File defaultFile = new File(defaultPath);
-                xmlFile = new File(System.getProperty("user.dir") + "/src/JMServer/history/" + username + ".xml");
+                xmlFile = new File(dirPath + username + ".xml");
                 xmlFile.createNewFile();
                 copyFile(defaultFile, xmlFile);
                 doc = docBuilder.parse(filePath);
@@ -139,7 +144,7 @@ public class History {
     public void sendHistory(String username) throws IOException {
 
         try {
-            filePath = System.getProperty("user.dir") + "/src/JMServer/history/" + username + ".xml";
+            String filePath = dirPath + username + ".xml";
             File fXmlFile = new File(filePath);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -169,9 +174,9 @@ public class History {
 
     // add a new XML history log for the new user
     public void addNewUser(String username) throws IOException {
-        String defaultPath = System.getProperty("user.dir") + "/src/JMServer/history/DEFAULT.xml";
+        String defaultPath = dirPath + "DEFAULT.xml";
         File defaultFile = new File(defaultPath);
-        File xmlFile = new File(System.getProperty("user.dir") + "/src/JMServer/history/" + username + ".xml");
+        File xmlFile = new File(dirPath + username + ".xml");
         xmlFile.createNewFile();
         copyFile(defaultFile, xmlFile);
     }
