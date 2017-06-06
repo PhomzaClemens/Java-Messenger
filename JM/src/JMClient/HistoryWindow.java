@@ -1,32 +1,34 @@
 package JMClient;
 
+<<<<<<< HEAD
 import JMClient.History;
 import javax.swing.JFileChooser;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.JLabel;
 import java.awt.Font;
+=======
+import javax.swing.table.DefaultTableModel;
+>>>>>>> version-1.0
 
 public class HistoryWindow extends javax.swing.JFrame {
 
-    public History hist;
-    public File file;
-    public String historyFile;
-    public HistoryWindow historyFrame;
-
+    public String username = "";
+    public ClientWindow clientWindow = null;
+    
     // constructor
-    public HistoryWindow() {
+    public HistoryWindow(ClientWindow _clientWindow) {
         initComponents();
+        clientWindow = _clientWindow;
     }
 
-    // constructor
-    public HistoryWindow(History hist) {
-        initComponents();
-        this.hist = hist;
-        hist.FillTable(this);
+    // add a message to the table
+    public void addTableEntry(String sender, String content, String recipient, String timeStamp) {
+        DefaultTableModel model = (DefaultTableModel) this.historyTable.getModel();
+        model.insertRow(0, new Object[]{sender, content, recipient, timeStamp});
     }
 
-    // initializes all of the Java swing components objects that your front-end GUI uses using the NetBeans GUI Builder
+    // initializes all of the Java swing components objects that the front-end GUI uses (NetBeans GUI Builder)
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -37,6 +39,7 @@ public class HistoryWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Chat History");
 
+        historyTable.setAutoCreateRowSorter(true);
         historyTable.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
         historyTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -86,21 +89,27 @@ public class HistoryWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< HEAD
+=======
+    // checks to see if we're dealing with a Windows Operating System
+>>>>>>> version-1.0
     public boolean isWin32() {
         return System.getProperty("os.name").startsWith("Windows");
     }
 
-    public static void main(String args[]) {
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new HistoryWindow().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTable historyTable;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+//    public static void main(String args[]) {
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                new HistoryWindow().setVisible(true);
+//            }
+//        });
+//    }
 }

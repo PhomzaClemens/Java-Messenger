@@ -3,15 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMClient/History.java</file>
             <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMClient/Client.java</file>
             <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMClient/ClientWindow.java</file>
             <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMClient/HistoryWindow.java</file>
-            <file>file:/Users/macbookpro/git/Java-Messenger/JM/test/JMClient/HistoryTest.java</file>
-            <file>file:/Users/macbookpro/git/Java-Messenger/JM/test/JMServer/ServerTest.java</file>
-            <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMClient/ClientMain.java</file>
-            <file>file:/Users/macbookpro/git/Java-Messenger/JM/test/JMClient/ClientTest.java</file>
-            <file>file:/Users/macbookpro/git/Java-Messenger/JM/test/JMServer/MessageTest.java</file>
+            <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/History.java</file>
+            <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/ServerThread.java</file>
+            <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/ServerWindow.java</file>
             <file>file:/Users/macbookpro/git/Java-Messenger/JM/src/JMServer/Server.java</file>
         </group>
     </open-files>

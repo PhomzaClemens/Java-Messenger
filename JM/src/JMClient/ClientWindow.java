@@ -6,35 +6,50 @@ import java.awt.event.WindowListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import JMServer.Message;
+import java.awt.Color;
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultCaret;
 
 public class ClientWindow extends javax.swing.JFrame {
 
-    public Client client;
-    public Thread clientThread;
-    public String serverAddress;
-    public int port;
-    public String username;
-    public String password;
-    public DefaultListModel model;
-    public String historyFile;
-    public HistoryWindow historyWindow;
-    public History history;
+    public Client client = null;
+    public Thread clientThread = null;
+
+    public String serverAddress = "";
+    public int port = 9000;
+    public String username = "", password = "";
+
+    public DefaultListModel model = null;
+    public HistoryWindow historyWindow = null;
+
+    int secretButtonColorIndex = 0;
 
     // constructor
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public ClientWindow() {
+
         initComponents();
         this.setTitle("JMessenger - Client");
         model.addElement("Everyone");
         userList.setSelectedIndex(0);
-        history = new History();
-        historyWindow = new HistoryWindow(history);
+        historyWindow = new HistoryWindow(this);
         historyWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         historyWindow.setVisible(false);
         historyButton.setEnabled(false);
         messageTextField.setEditable(false);
         consoleTextArea.setEditable(false);
+
+        // make the console window scroll to the bottom as its default behavior
+        DefaultCaret caret = (DefaultCaret) consoleTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         this.addWindowListener(new WindowListener() {
 
@@ -78,7 +93,7 @@ public class ClientWindow extends javax.swing.JFrame {
         return System.getProperty("os.name").startsWith("Windows");
     }
 
-    // initializes all of the Java swing components objects that your front-end GUI uses using the NetBeans GUI Builder
+    // initializes all of the Java swing components objects that the front-end GUI uses (NetBeans GUI Builder)
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -103,7 +118,8 @@ public class ClientWindow extends javax.swing.JFrame {
         clearButton = new javax.swing.JButton();
         loginButton = new javax.swing.JButton();
         historyButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        JMessengerLabel = new javax.swing.JLabel();
+        secretLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(820, 470));
@@ -232,15 +248,29 @@ public class ClientWindow extends javax.swing.JFrame {
 
         historyButton.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
         historyButton.setText("History");
-        historyButton.setEnabled(true);
+        historyButton.setEnabled(false);
         historyButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 historyButtonActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
-        jLabel1.setText("JMessenger™");
+        JMessengerLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
+        JMessengerLabel.setText("JMessenger™");
+        JMessengerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JMessengerLabelMouseClicked(evt);
+            }
+        });
+
+        secretLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        secretLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/JMClient/Images/iTunesArtwork@2x.png"))); // NOI18N
+        secretLabel.setText(" ");
+        secretLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                secretLabelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -249,20 +279,19 @@ public class ClientWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(serverAddressLabel)
-                            .addComponent(usernameLabel))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(secretLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(usernameLabel)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(serverAddressTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
                             .addComponent(usernameTextField))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                        .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(serverPortLabel)
                             .addComponent(passwordLabel))
@@ -270,9 +299,9 @@ public class ClientWindow extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(serverPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                                .addGap(10, 10, 10)
                                 .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -282,8 +311,8 @@ public class ClientWindow extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(historyButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel1)))
-                        .addGap(4, 4, 4))
+                                .addComponent(JMessengerLabel)))
+                        .addGap(10, 10, 10))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(msgLabel)
@@ -291,8 +320,15 @@ public class ClientWindow extends javax.swing.JFrame {
                         .addComponent(messageTextField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)))
-                .addContainerGap())
+                        .addGap(12, 12, 12))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE))
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,21 +341,23 @@ public class ClientWindow extends javax.swing.JFrame {
                     .addComponent(serverPortTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(connectButton)
                     .addComponent(historyButton)
-                    .addComponent(jLabel1))
+                    .addComponent(JMessengerLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordLabel)
-                    .addComponent(usernameLabel)
-                    .addComponent(registerButton)
-                    .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(loginButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(secretLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(passwordLabel)
+                        .addComponent(usernameLabel)
+                        .addComponent(registerButton)
+                        .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(loginButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clearButton)
@@ -335,30 +373,48 @@ public class ClientWindow extends javax.swing.JFrame {
     // when the disconnect button is pressed, disconnect from the server
     private void connectButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_connectButtonActionPerformed
 
+<<<<<<< HEAD
         // validate the user input
         boolean validated = validateTextField();
+=======
+        // validate user input
+        boolean validated = validateServerPortTextField();
+>>>>>>> version-1.0
 
         // two cases for each time the button is pressed: connect button, disconnect button
         if (connectButton.getText().equals("Connect")) {
+
             if (validated) {
                 serverAddress = serverAddressTextField.getText();
                 port = Integer.parseInt(serverPortTextField.getText());
 
                 try {
-                    client = new Client(this);  // instantiate a new client attached to this clientWindow instance
+                    client = new Client(this, historyWindow);  // instantiate a new client attached to this clientWindow instance
                     clientThread = new Thread(client);  // create a new client thread
                     clientThread.start();
 
+<<<<<<< HEAD
                     client.send(new Message("connect", "requester", "", "SERVER"));
+=======
+                    // send a connection request to the server
+                    client.send(new Message("connect", "CLIENT", "connection request", "SERVER"));
+
+                    // update GUI elements
+>>>>>>> version-1.0
                     connectButton.setText("Disconnect");
                     serverAddressTextField.setEditable(false);
                     serverPortTextField.setEditable(false);
+                    serverAddressTextField.setEnabled(false);
+                    serverPortTextField.setEnabled(false);
                     usernameTextField.requestFocus();  // set the cursor to the username textbox after clicking on the connect button
                     usernameTextField.setEditable(true);
                     passwordPasswordField.setEditable(true);
+<<<<<<< HEAD
                     messageTextField.setEditable(true);
                     historyButton.setEnabled(true);
                     clearButton.setEnabled(true);
+=======
+>>>>>>> version-1.0
 
                 } catch (IOException exception) {
                     consoleTextArea.append("[Application -> Me]    Server not found\n");
@@ -366,13 +422,18 @@ public class ClientWindow extends javax.swing.JFrame {
                 }
 
             } else if (!validated) {
+<<<<<<< HEAD
                 // ask the user to enter a valid server address and port number
+=======
+>>>>>>> version-1.0
                 consoleTextArea.append("[Application -> Me]    User Input Error: Please Re-Enter the Server Address and/or Port Number\n");
                 serverAddressTextField.requestFocus();
                 return;
             }
+
         } else if (connectButton.getText().equals("Disconnect")) {
 
+<<<<<<< HEAD
             // send a signout message to the server
             client.send(new Message("signout", username, ".disconnect", "SERVER"));
             
@@ -383,19 +444,42 @@ public class ClientWindow extends javax.swing.JFrame {
             historyButton.setEnabled(false);
             
             usernameTextField.setEditable(false);
+=======
+            String Me = username;
+            
+            // send a signout message to the server
+            client.send(new Message("signout", Me, ".disconnect", "SERVER"));
+
+            // update GUI elements
+            loginButton.setEnabled(false);
+            registerButton.setEnabled(false);
+            usernameTextField.setEditable(false);
+            passwordPasswordField.setEditable(false);
+            serverAddressTextField.setEditable(true);
+            serverPortTextField.setEditable(true);
+            serverAddressTextField.setEnabled(true);
+            serverPortTextField.setEnabled(true);
+            messageTextField.setEditable(false);
+            clearButton.setEnabled(false);
+
+>>>>>>> version-1.0
             usernameTextField.setText("");
             passwordPasswordField.setEditable(false);
             passwordPasswordField.setText("");
+<<<<<<< HEAD
             loginButton.setEnabled(false);
             registerButton.setEnabled(false);
             
             messageTextField.setEditable(false);
             clearButton.setEnabled(false);
+=======
+            connectButton.setText("Connect");
+>>>>>>> version-1.0
         }
     }//GEN-LAST:event_connectButtonActionPerformed
 
-    // validate server address text field and server port text field
-    private boolean validateTextField() {
+    // validate the server port text field
+    private boolean validateServerPortTextField() {
 
         try {
             Integer portNumber = Integer.parseInt(serverPortTextField.getText());
@@ -411,12 +495,16 @@ public class ClientWindow extends javax.swing.JFrame {
 
     // login button
     private void loginButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_loginButtonActionPerformed
+
+        // get the username and password from the text fields
         username = usernameTextField.getText();
         password = String.valueOf(passwordPasswordField.getPassword());
 
+        // send a login request to the server
         if (!username.isEmpty() && !password.isEmpty()) {
             client.send(new Message("login", username, password, "SERVER"));
         }
+
         messageTextField.requestFocus();
     }//GEN-LAST:event_loginButtonActionPerformed
 
@@ -426,21 +514,31 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_registerButtonActionPerformed
+
+        // get the username and password from the text fields
         username = usernameTextField.getText();
         password = String.valueOf(passwordPasswordField.getPassword());
 
+        // send a register request to the server
         if (!username.isEmpty() && !password.isEmpty()) {
             client.send(new Message("register", username, password, "SERVER"));
         }
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void messageTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageTextFieldActionPerformed
+
+        // get the message and recipient from the GUI elements
         String message = messageTextField.getText();
         String recipient = userList.getSelectedValue().toString();
 
         if (!message.isEmpty() && !recipient.isEmpty()) {
+<<<<<<< HEAD
             messageTextField.setText("");
             client.send(new Message("message", username, message, recipient));
+=======
+            client.send(new Message("message", username, message, recipient));
+            messageTextField.setText("");  // clear the message text field
+>>>>>>> version-1.0
         }
     }//GEN-LAST:event_messageTextFieldActionPerformed
 
@@ -456,6 +554,7 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_serverPortTextFieldActionPerformed
 
     private void historyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyButtonActionPerformed
+        requestHistory();
         historyWindow.setLocation(this.getLocation());
         historyWindow.setVisible(true);
     }//GEN-LAST:event_historyButtonActionPerformed
@@ -469,35 +568,109 @@ public class ClientWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_serverAddressTextFieldActionPerformed
 
     private void serverPortTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_serverPortTextFieldKeyTyped
+
+        // limit user input
         if (serverPortTextField.getText().length() >= 5) {
             evt.consume();
         }
     }//GEN-LAST:event_serverPortTextFieldKeyTyped
 
     private void serverAddressTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_serverAddressTextFieldKeyTyped
+
+        // limit user input
         if (serverAddressTextField.getText().length() >= 32) {
             evt.consume();
         }
     }//GEN-LAST:event_serverAddressTextFieldKeyTyped
 
     private void usernameTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextFieldKeyTyped
+
+        // limit user input
         if (usernameTextField.getText().length() >= 32) {
             evt.consume();
         }
     }//GEN-LAST:event_usernameTextFieldKeyTyped
 
     private void passwordPasswordFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordPasswordFieldKeyTyped
+
+        // limit user input
         if (passwordPasswordField.getText().length() >= 20) {
             evt.consume();
         }
     }//GEN-LAST:event_passwordPasswordFieldKeyTyped
 
+    private void JMessengerLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JMessengerLabelMouseClicked
+
+        // go to JMessenger's GitHub repository
+        try {
+            Desktop.getDesktop().browse(new URI("https://github.com/kimdj/Java-Messenger"));
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(ClientWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ClientWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_JMessengerLabelMouseClicked
+
+    // change background color
+    private void secretLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_secretLabelMouseClicked
+
+        switch (secretButtonColorIndex) {
+            case 0:
+                getContentPane().setBackground(Color.decode("#FFFFCC"));
+                secretButtonColorIndex = 1;
+                break;
+            case 1:
+                getContentPane().setBackground(Color.decode("#FFCCE5"));  // light pink
+                secretButtonColorIndex = 2;
+                break;
+            case 2:
+                getContentPane().setBackground(Color.decode("#99FFCC"));  // light green
+                secretButtonColorIndex = 3;
+                break;
+            case 3:
+                getContentPane().setBackground(Color.decode("#FFFFFF"));  // white
+                secretButtonColorIndex = 4;
+                break;
+            case 4:
+                getContentPane().setBackground(Color.decode("#F6F6F6"));  // light gray
+                secretButtonColorIndex = 0;
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_secretLabelMouseClicked
+
+    public void historyButtonOn() {
+        historyButton.setEnabled(true);
+    }
+
+    public void historyButtonOff() {
+        historyButton.setEnabled(false);
+    }
+
+    // send a chat history request to the server
+    public void requestHistory() {
+
+        // CLEAR THE HISTORY TABLE
+        DefaultTableModel historyTable = (DefaultTableModel) historyWindow.historyTable.getModel();
+        historyTable.setRowCount(0);
+
+        // SEND THE REQUEST TO THE SERVER
+        Message outMsg = new Message("history", username, "requesting chat history", "SERVER");
+        client.send(outMsg);
+    }
+
+    // get the current time stamp
+    public String timeStamp() {
+        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel JMessengerLabel;
     public javax.swing.JButton clearButton;
     public javax.swing.JButton connectButton;
     public javax.swing.JTextArea consoleTextArea;
     private javax.swing.JButton historyButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
@@ -507,6 +680,7 @@ public class ClientWindow extends javax.swing.JFrame {
     private javax.swing.JLabel passwordLabel;
     public javax.swing.JPasswordField passwordPasswordField;
     public javax.swing.JButton registerButton;
+    private javax.swing.JLabel secretLabel;
     private javax.swing.JLabel serverAddressLabel;
     public javax.swing.JTextField serverAddressTextField;
     private javax.swing.JLabel serverPortLabel;
@@ -515,4 +689,13 @@ public class ClientWindow extends javax.swing.JFrame {
     private javax.swing.JLabel usernameLabel;
     public javax.swing.JTextField usernameTextField;
     // End of variables declaration//GEN-END:variables
+
+    public static void main(String args[]) {
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ClientWindow().setVisible(true);
+            }
+        });
+    }
 }

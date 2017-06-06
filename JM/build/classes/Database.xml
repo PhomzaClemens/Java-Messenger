@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <data>
 <user>
-    <username>bingo</username>
-    <password>bob</password>
-  </user>
-<user>
-    <username>admin</username>
+    <username>username</username>
     <password>password</password>
   </user>
 <user>
     <username>david</username>
     <password>kim</password>
   </user>
-  <user>
-    <username>client</username>
-    <password>server</password>
-  </user>
-  <user>
-    <username>username</username>
+<user>
+    <username>admin</username>
     <password>password</password>
   </user>
 <user>
-    <username>MEGALON</username>
-    <password>AYYLMAO</password>
+    <username>new user</username>
+    <password>blah</password>
   </user>
 <user>
     <username>a</username>
+    <password>a</password>
+  </user>
+<user>
+    <username>b</username>
     <password>b</password>
+  </user>
+<user>
+    <username>c</username>
+    <password>c</password>
+  </user>
+<user>
+    <username>d</username>
+    <password>d</password>
+  </user>
+<user>
+    <username>e</username>
+    <password>e</password>
+  </user>
+<user>
+    <username>yk7da</username>
+    <password>!EXN4!kK</password>
+  </user>
+<user>
+    <username>f</username>
+    <password>f</password>
   </user>
 </data>

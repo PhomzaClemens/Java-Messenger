@@ -15,7 +15,7 @@ import org.xml.sax.SAXException;
 
 public class Database {
 
-    public String filePath;
+    public String filePath = "";  // file path for 'Database.xml'
 
     // constructor
     public Database(String filePath) {
@@ -27,7 +27,7 @@ public class Database {
 
         try {
             File xmlFile = new File(filePath);
-            
+
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(xmlFile);
@@ -118,8 +118,8 @@ public class Database {
 
     // get the XML tag value
     public static String getTagValue(String sTag, Element eElement) {
-        NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
-        Node nValue = (Node) nlList.item(0);
-        return nValue.getNodeValue();
+        NodeList nodeList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
+        Node nodeValue = (Node) nodeList.item(0);
+        return nodeValue.getNodeValue();
     }
 }
