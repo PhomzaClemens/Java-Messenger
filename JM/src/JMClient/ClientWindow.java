@@ -59,7 +59,7 @@ public class ClientWindow extends javax.swing.JFrame {
             public void windowClosing(WindowEvent e) {
                 try {
                     client.send(new Message("message", username, ".disconnect", "SERVER"));
-                    clientThread.stop();
+                    clientThread.interrupt();
                 } catch (Exception exception) {
                 }
             }
@@ -414,8 +414,10 @@ public class ClientWindow extends javax.swing.JFrame {
 
         } else if (connectButton.getText().equals("Disconnect")) {
 
+            String Me = username;
+            
             // send a signout message to the server
-            client.send(new Message("signout", username, ".disconnect", "SERVER"));
+            client.send(new Message("signout", Me, ".disconnect", "SERVER"));
 
             // update GUI elements
             loginButton.setEnabled(false);
@@ -611,7 +613,7 @@ public class ClientWindow extends javax.swing.JFrame {
         Message outMsg = new Message("history", username, "requesting chat history", "SERVER");
         client.send(outMsg);
     }
-    
+
     // get the current time stamp
     public String timeStamp() {
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());

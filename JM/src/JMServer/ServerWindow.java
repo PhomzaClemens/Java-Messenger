@@ -3,6 +3,7 @@ package JMServer;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.text.DefaultCaret;
 
 public class ServerWindow extends javax.swing.JFrame {
 
@@ -20,6 +21,10 @@ public class ServerWindow extends javax.swing.JFrame {
 
         fileChooser = new JFileChooser();
         consoleTextArea.setEditable(false);
+        
+        // make the console window scroll to the bottom as its default behavior
+        DefaultCaret caret = (DefaultCaret) consoleTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
     }
 
     // initializes all of the Java swing components objects that the front-end GUI uses (NetBeans GUI Builder)

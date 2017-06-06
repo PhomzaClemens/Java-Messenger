@@ -150,8 +150,9 @@ public class Client implements Runnable {
 
                 case "signout":  // message type: signout
 
-                    // message.content is the user that signed out
-                    if (message.content.equals(Me)) {
+                    // NOTE: message.content contains the username that signed out
+                    
+                    if (message.content.equals(Me)) {  // case: the client signed out
 
                         clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Me]    Bye\n");
                         clientWindow.clearButton.setEnabled(false);
@@ -160,14 +161,15 @@ public class Client implements Runnable {
                         clientWindow.historyButtonOff();
                         clientWindow.setTitle("JMessenger - Client");
 
-                        for (int i = 1; i < userlist.size(); i++) {
+                        for (int i = userlist.size() - 1; i > 0; --i) {
+                            System.out.println(userlist.size() + " " + i);
                             userlist.removeElementAt(i);
                         }
 
-                        clientWindow.clientThread.stop();
+                        clientWindow.clientThread.interrupt();
                         return false;
 
-                    } else {
+                    } else {  // some other client signed out
                         userlist.removeElement(message.content);
                         clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Everyone]    " + message.content + " has signed out\n");
                     }
@@ -194,7 +196,7 @@ public class Client implements Runnable {
                 userlist.removeElementAt(i);
             }
 
-            clientWindow.clientThread.stop();
+            clientWindow.clientThread.interrupt();
 
             System.out.println("Exception Client.handler()");
             exception.printStackTrace();

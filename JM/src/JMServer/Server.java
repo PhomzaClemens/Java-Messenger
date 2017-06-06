@@ -79,7 +79,7 @@ public class Server implements Runnable {
     @SuppressWarnings("deprecation")
     public void stop() {
         if (thread != null) {
-            thread.stop();
+            thread.interrupt();
             thread = null;
         }
 
@@ -251,7 +251,7 @@ public class Server implements Runnable {
             } catch (IOException ioexception) {
                 serverWindow.consoleTextArea.append("Error closing thread ID: " + ID + "\n" + ioexception + "\n");
             }
-            toTerminate.stop();
+            toTerminate.interrupt();
         }
     }
 
