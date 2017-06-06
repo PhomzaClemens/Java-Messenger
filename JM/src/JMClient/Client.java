@@ -92,6 +92,7 @@ public class Client implements Runnable {
                         clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Successful\n");
                         clientWindow.usernameTextField.setEnabled(false);
                         clientWindow.passwordPasswordField.setEnabled(false);
+                        clientWindow.messageTextField.setEditable(true);
                         clientWindow.historyButtonOn();
                         clientWindow.setTitle("JMessenger - " + message.recipient);
 
@@ -162,7 +163,6 @@ public class Client implements Runnable {
                         clientWindow.setTitle("JMessenger - Client");
 
                         for (int i = userlist.size() - 1; i > 0; --i) {
-                            System.out.println(userlist.size() + " " + i);
                             userlist.removeElementAt(i);
                         }
 

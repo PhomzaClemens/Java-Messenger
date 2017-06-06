@@ -174,14 +174,25 @@ public class Server implements Runnable {
 
             case "message":  // message type: message
 
-                // FIRST, ADD THE MESSAGE TO THE CLIENT CHAT HISTORY
+                // FIRST, ADD THE MESSAGE TO THE SENDER'S CHAT HISTORY
                 history.addMessage(inMsg, timeStamp(), inMsg.sender);
                 
+                // THEN, ADD THE MESSAGE TO THE RECIPIENT                
                 if (inMsg.recipient.equals("Everyone")) {
                 
+                    // ADD THE MESSAGE TO EVERYONE'S CHAT HISTORY EXCEPT THE SENDER
+                    for (int i = 0; i < clientCount; ++i) {
+                        if (!clients[i].username.equals(inMsg.sender)) {
+                            history.addMessage(inMsg, timeStamp(), clients[i].username);
+                        }
+                    }
+                    
                     // SEND THE MESSAGE TO EVERYONE
                     sendAll("message", inMsg.sender, inMsg.content);
                 } else {
+                    
+                    // ADD THE MESSAGE TO THE RECIPIENT'S CHAT HISTORY
+                    history.addMessage(inMsg, timeStamp(), inMsg.recipient);
                     
                     // SEND THE PRIVATE MESSAGE TO THE RECIPIENT
                     findUserThread(inMsg.recipient).send(new Message(inMsg.type, inMsg.sender, inMsg.content, inMsg.recipient));

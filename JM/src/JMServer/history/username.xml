@@ -2,482 +2,98 @@
 <data>
 <message>
     <sender>username</sender>
-    <content>username's first message</content>
-    <recipient>Everyone</recipient>
-    <time>6/1/17 3:53 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>this is also my second message!!</content>
-    <recipient>Everyone</recipient>
-    <time>6/1/17 3:53 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
     <content>a</content>
     <recipient>Everyone</recipient>
-    <time>6/1/17 3:57 PM</time>
+    <time>6/6/17 12:23 AM</time>
   </message>
 <message>
     <sender>username</sender>
     <content>b</content>
     <recipient>Everyone</recipient>
-    <time>6/1/17 3:57 PM</time>
+    <time>6/6/17 12:23 AM</time>
   </message>
 <message>
     <sender>username</sender>
     <content>c</content>
     <recipient>Everyone</recipient>
-    <time>6/1/17 3:57 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>e</content>
-    <recipient>Everyone</recipient>
-    <time>6/1/17 3:57 PM</time>
+    <time>6/6/17 12:23 AM</time>
   </message>
 <message>
     <sender>username</sender>
     <content>d</content>
     <recipient>Everyone</recipient>
-    <time>6/1/17 3:57 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdf</content>
-    <recipient>Everyone</recipient>
-    <time>6/1/17 3:59 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>hi</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 12:43 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>test</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 12:48 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>this</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 12:48 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>is </content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 12:48 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>working asdgasdg?</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 12:48 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>blah</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 12:48 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>test</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 1:28 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>cool</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 1:29 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>sdlkgjaslkgjasdklhjsadlkhjadslkhja</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 3:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>sadgadsgdasfgadsf</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 3:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>sdasdgasdgasdhashASDhasdHsadh</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>dashsad</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>hadsghads</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>ghadsgasd</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>basdbgads</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>gasdgadsgadsg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>adsg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>bingo bobby</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:23 PM</time>
+    <time>6/6/17 12:23 AM</time>
   </message>
 <message>
     <sender>username</sender>
     <content>a</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>c</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:28 AM</time>
   </message>
 <message>
     <sender>username</sender>
     <content>b</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:28 AM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>e</content>
+    <content>c</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:28 AM</time>
   </message>
 <message>
     <sender>username</sender>
     <content>d</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:28 AM</time>
+  </message>
+<message>
+    <sender>username</sender>
+    <content>e</content>
+    <recipient>Everyone</recipient>
+    <time>6/6/17 12:28 AM</time>
   </message>
 <message>
     <sender>username</sender>
     <content>f</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:28 AM</time>
   </message>
 <message>
-    <sender>username</sender>
-    <content>g</content>
+    <sender>a</sender>
+    <content>sdsdghdsh</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:28 AM</time>
   </message>
 <message>
-    <sender>username</sender>
-    <content>asd</content>
+    <sender>a</sender>
+    <content>dsgasdfdasf</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:29 AM</time>
   </message>
 <message>
-    <sender>username</sender>
-    <content>gsa</content>
+    <sender>a</sender>
+    <content>asdfasdfasdf</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:29 AM</time>
   </message>
 <message>
-    <sender>username</sender>
-    <content>dgas</content>
+    <sender>a</sender>
+    <content>asdfasdgfadsfg</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:29 AM</time>
   </message>
 <message>
-    <sender>username</sender>
-    <content>dgas</content>
+    <sender>a</sender>
+    <content>sdfgsdfg</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
+    <time>6/6/17 12:29 AM</time>
   </message>
 <message>
-    <sender>username</sender>
-    <content>dfas</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>dgfas</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>dgasd</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>gfasdg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>fasdfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdf</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>dsag</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdgf</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>sadfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>adsfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdgf</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>sadfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>sadfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdgf</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>sadfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdgf</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:24 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>dgdgsahasdh</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 11:06 AM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>ss dd dd dd dd dd</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 11:06 AM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdf</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 2:25 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdhgasdhasdh</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 2:25 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>ahdsah</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 2:25 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>adsgadsgdas</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 2:25 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>gadsgadsgadsgd</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 2:25 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>testing</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 2:34 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>blah</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 2:34 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>username</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 2:51 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>lgjalkdsg</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 6:06 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>hello</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 6:06 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
+    <sender>a</sender>
     <content>test</content>
     <recipient>Everyone</recipient>
-    <time>6/3/17 6:06 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdg</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 6:17 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdgasdg</content>
-    <recipient>Everyone</recipient>
-    <time>6/3/17 6:17 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdg</content>
-    <recipient>Everyone</recipient>
-    <time>6/4/17 4:15 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>asdh</content>
-    <recipient>Everyone</recipient>
-    <time>6/4/17 4:15 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>.disconnect</content>
-    <recipient>Everyone</recipient>
-    <time>6/5/17 9:05 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>private to a</content>
-    <recipient>a</recipient>
-    <time>6/5/17 9:07 PM</time>
-  </message>
-<message>
-    <sender>username</sender>
-    <content>testing from username</content>
-    <recipient>a</recipient>
-    <time>6/5/17 9:21 PM</time>
+    <time>6/6/17 12:29 AM</time>
   </message>
 </data>

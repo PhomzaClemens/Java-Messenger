@@ -2,68 +2,44 @@
 <data>
 <message>
     <sender>b</sender>
-    <content>dsgds</content>
+    <content>test</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:13 PM</time>
+    <time>6/6/17 12:32 AM</time>
   </message>
 <message>
-    <sender>b</sender>
-    <content>gsdag</content>
+    <sender>c</sender>
+    <content>ccc</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:13 PM</time>
+    <time>6/6/17 12:32 AM</time>
+  </message>
+<message>
+    <sender>a</sender>
+    <content>asdgasdgasd</content>
+    <recipient>b</recipient>
+    <time>6/6/17 12:32 AM</time>
+  </message>
+<message>
+    <sender>a</sender>
+    <content>asdf</content>
+    <recipient>b</recipient>
+    <time>6/6/17 12:32 AM</time>
+  </message>
+<message>
+    <sender>c</sender>
+    <content>ccc</content>
+    <recipient>b</recipient>
+    <time>6/6/17 12:32 AM</time>
+  </message>
+<message>
+    <sender>c</sender>
+    <content>ccccc</content>
+    <recipient>b</recipient>
+    <time>6/6/17 12:32 AM</time>
   </message>
 <message>
     <sender>b</sender>
-    <content>dsag</content>
+    <content>EVERYONE</content>
     <recipient>Everyone</recipient>
-    <time>6/2/17 5:13 PM</time>
-  </message>
-<message>
-    <sender>b</sender>
-    <content>adsgh</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>b</sender>
-    <content>dashasdhasdhadshasd</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>b</sender>
-    <content>hashasdhadshdsfh</content>
-    <recipient>Everyone</recipient>
-    <time>6/2/17 5:14 PM</time>
-  </message>
-<message>
-    <sender>b</sender>
-    <content>private from b</content>
-    <recipient>username</recipient>
-    <time>6/5/17 9:07 PM</time>
-  </message>
-<message>
-    <sender>b</sender>
-    <content>asdh</content>
-    <recipient>username</recipient>
-    <time>6/5/17 9:07 PM</time>
-  </message>
-<message>
-    <sender>b</sender>
-    <content>asdh</content>
-    <recipient>username</recipient>
-    <time>6/5/17 9:07 PM</time>
-  </message>
-<message>
-    <sender>b</sender>
-    <content>asdh</content>
-    <recipient>username</recipient>
-    <time>6/5/17 9:07 PM</time>
-  </message>
-<message>
-    <sender>b</sender>
-    <content>hi</content>
-    <recipient>username</recipient>
-    <time>6/5/17 9:21 PM</time>
+    <time>6/6/17 12:33 AM</time>
   </message>
 </data>

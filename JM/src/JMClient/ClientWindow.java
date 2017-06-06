@@ -262,7 +262,7 @@ public class ClientWindow extends javax.swing.JFrame {
         });
 
         secretLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        secretLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/JMClient/iTunesArtwork@2x.png"))); // NOI18N
+        secretLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/JMClient/Images/iTunesArtwork@2x.png"))); // NOI18N
         secretLabel.setText(" ");
         secretLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -398,8 +398,6 @@ public class ClientWindow extends javax.swing.JFrame {
                     usernameTextField.requestFocus();  // set the cursor to the username textbox after clicking on the connect button
                     usernameTextField.setEditable(true);
                     passwordPasswordField.setEditable(true);
-                    messageTextField.setEditable(true);
-                    //consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Connection Successful\n");
 
                 } catch (IOException exception) {
                     consoleTextArea.append("[Application -> Me]    Server not found\n");

@@ -16,7 +16,6 @@ public class HistoryWindow extends javax.swing.JFrame {
     // add a message to the table
     public void addTableEntry(String sender, String content, String recipient, String timeStamp) {
         DefaultTableModel model = (DefaultTableModel) this.historyTable.getModel();
-        //model.addRow(new Object[]{sender, content, recipient, timeStamp});
         model.insertRow(0, new Object[]{sender, content, recipient, timeStamp});
     }
 
