@@ -44,8 +44,7 @@ public class Client implements Runnable {
     public void run() {
         boolean isRunning = true;
         while (isRunning) {
-            isRunning = handler();
-
+            isRunning = handler();  // LISTEN FOR INCOMING SERVER MESSAGES
         }
     }
 
