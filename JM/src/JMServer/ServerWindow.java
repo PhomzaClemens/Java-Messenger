@@ -16,14 +16,10 @@ public class ServerWindow extends javax.swing.JFrame {
 
         databaseFileTextField.setEditable(false);
         databaseFileTextField.setBackground(Color.WHITE);
+        historyFileTextField.setEditable(false);
 
         fileChooser = new JFileChooser();
         consoleTextArea.setEditable(false);
-    }
-
-    // checks to see if we're dealing with a Windows Operating System
-    public boolean isWin32() {
-        return System.getProperty("os.name").startsWith("Windows");
     }
 
     // initializes all of the Java swing components objects that the front-end GUI uses (NetBeans GUI Builder)
@@ -161,26 +157,44 @@ public class ServerWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // start the server
     private void startServerButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_startServerButtonActionPerformed
 
         if (startServerButton.getText().equals("Start Server")) {
-            if (validateServerPortTextField()) {
-                server = new Server(this);
-                openDatabaseFileButton.setEnabled(false);
-                startServerButton.setText("Stop Server");
-            } else if (!validateServerPortTextField()) {
-                consoleTextArea.append("Please enter a valid port number.\n");
+            switch (isUserInputValid()) {
+                case 0:  // 0 means yes
+
+                    // START THE SERVER
+                    server = new Server(this);
+                    
+                    // UPDATE THE UI ELEMENTS
+                    openDatabaseFileButton.setEnabled(false);
+                    serverPortTextField.setEnabled(false);
+                    openHistoryFileButton.setEnabled(true);
+                    startServerButton.setText("Stop Server");
+                    break;
+                case 1:  // 1 means invalid port number
+                    consoleTextArea.append("Please enter a valid port number.\n");
+                    break;
+                case 2:  // 2 means invalid database file
+                    consoleTextArea.append("Choose a valid database file.\n");
+                    break;
+                default:  // 3 means invalid database file and port number
+                    consoleTextArea.append("Please enter a valid port number and database file.\n");
+                    break;
             }
 
-            historyFileTextField.setEnabled(true);
-            openHistoryFileButton.setEnabled(true);
         } else if (startServerButton.getText().equals("Stop Server")) {
+            
+            // STOP THE SERVER
             server.stop();
+            
+            // UPDATE THE UI ELEMENTS
             openDatabaseFileButton.setEnabled(true);
             startServerButton.setText("Start Server");
-            consoleTextArea.append("Server stopped running.\n");
             historyFileTextField.setEnabled(false);
             openHistoryFileButton.setEnabled(false);
+            consoleTextArea.append("Server stopped running.\n");
         }
 
     }//GEN-LAST:event_startServerButtonActionPerformed
@@ -193,6 +207,7 @@ public class ServerWindow extends javax.swing.JFrame {
     }
 
     private void openDatabaseFileButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_openDatabaseFileButtonActionPerformed
+
         File workingDirectory = new File(System.getProperty("user.dir") + "/src");
         fileChooser.setCurrentDirectory(workingDirectory);
         fileChooser.showDialog(this, "Open");
@@ -205,12 +220,15 @@ public class ServerWindow extends javax.swing.JFrame {
                 dbFilePath = dbFilePath.replace("\\", "/");
             }
             databaseFileTextField.setText(dbFilePath);
+
             startServerButton.setEnabled(true);
         }
+
+        System.out.println("Database File Opened");
     }//GEN-LAST:event_openDatabaseFileButtonActionPerformed
 
     private void serverPortTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverPortTextFieldActionPerformed
-
+        startServerButton.requestFocus();
     }//GEN-LAST:event_serverPortTextFieldActionPerformed
 
     private void serverPortTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_serverPortTextFieldKeyTyped
@@ -233,22 +251,45 @@ public class ServerWindow extends javax.swing.JFrame {
             File file = chooser.getSelectedFile();
             server.history.setFilePath(file.getPath() + "/");
             historyFileTextField.setText(file.getPath() + "/");
+            
+            openHistoryFileButton.setEnabled(false);
+            System.out.println("History File Opened");
         }
     }//GEN-LAST:event_openHistoryFileButtonActionPerformed
 
     // validate the server port text field
-    private boolean validateServerPortTextField() {
+    // returns 0 if both the port number and database file are valid
+    // returns 1 if only the port number is valid
+    // returns 2 if only the database file is valid
+    // returns 3 if both the port number and database file are invalid
+    private int isUserInputValid() {
+
+        boolean isPortNumberValid = false;
+        boolean isDatabaseFileValid = false;
 
         try {
             Integer portNumber = Integer.parseInt(serverPortTextField.getText());
             if (0 <= portNumber && portNumber <= 65535) {
-                return true;
-            } else {
-                return false;  // port number is out-of-bounds (ie. 0-65535)
+                isPortNumberValid = true;
             }
         } catch (NumberFormatException numberFormatException) {
-            return false;
+            return 1;
         }
+
+        isDatabaseFileValid = true;  // NEEDS A VALIDATE METHOD
+        if (isPortNumberValid && isDatabaseFileValid) {
+            return 0;
+        } else if (isPortNumberValid == true && isDatabaseFileValid == false) {
+            return 1;
+        } else if (isPortNumberValid == false && isDatabaseFileValid == true) {
+            return 2;
+        }
+        return 3;
+    }
+
+    // checks to see if we're dealing with a Windows Operating System
+    public boolean isWin32() {
+        return System.getProperty("os.name").startsWith("Windows");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

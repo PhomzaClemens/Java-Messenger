@@ -7,13 +7,13 @@ import javax.swing.JFrame;
 import JMServer.Message;
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.Image;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultCaret;
 
@@ -322,9 +322,9 @@ public class ClientWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 612, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE))
                             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addContainerGap())))
         );
@@ -341,14 +341,15 @@ public class ClientWindow extends javax.swing.JFrame {
                     .addComponent(historyButton)
                     .addComponent(JMessengerLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordLabel)
-                    .addComponent(usernameLabel)
-                    .addComponent(registerButton)
-                    .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(loginButton)
-                    .addComponent(secretLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(secretLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(passwordLabel)
+                        .addComponent(usernameLabel)
+                        .addComponent(registerButton)
+                        .addComponent(passwordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(loginButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
@@ -398,6 +399,7 @@ public class ClientWindow extends javax.swing.JFrame {
                     usernameTextField.setEditable(true);
                     passwordPasswordField.setEditable(true);
                     messageTextField.setEditable(true);
+                    //consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Connection Successful\n");
 
                 } catch (IOException exception) {
                     consoleTextArea.append("[Application -> Me]    Server not found\n");
@@ -601,13 +603,18 @@ public class ClientWindow extends javax.swing.JFrame {
     // send a chat history request to the server
     public void requestHistory() {
 
-        // clear the history table
+        // CLEAR THE HISTORY TABLE
         DefaultTableModel historyTable = (DefaultTableModel) historyWindow.historyTable.getModel();
         historyTable.setRowCount(0);
 
-        // send a request 
-        Message outgoingMessage = new Message("history", username, "requesting chat history", "SERVER");
-        client.send(outgoingMessage);
+        // SEND THE REQUEST TO THE SERVER
+        Message outMsg = new Message("history", username, "requesting chat history", "SERVER");
+        client.send(outMsg);
+    }
+    
+    // get the current time stamp
+    public String timeStamp() {
+        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

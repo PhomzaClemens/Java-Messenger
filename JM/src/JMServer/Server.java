@@ -20,17 +20,20 @@ public class Server implements Runnable {
     // constructor
     public Server(ServerWindow _serverWindow) {
 
-        clients = new ServerThread[MAX_THREAD];
         serverWindow = _serverWindow;
+        clients = new ServerThread[MAX_THREAD];  // create an array of threads where each thread is a client connection (socket)
         db = new Database(serverWindow.dbFilePath);
         history = new History(this);
 
         try {
-            port = Integer.parseInt(serverWindow.serverPortTextField.getText());
-            server = new ServerSocket(port);
+            // START THE SERVER SOCKET
+            server = new ServerSocket(Integer.parseInt(serverWindow.serverPortTextField.getText()));
             port = server.getLocalPort();
+
+            // START THE SERVER THREAD
             start();
 
+            // UPDATE THE UI ELEMENT
             serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort() + "\n");
         } catch (IOException ioexception) {
             serverWindow.consoleTextArea.append("Cannot bind to port " + port + ": " + "Retrying...\n");
@@ -41,29 +44,38 @@ public class Server implements Runnable {
     // constructor
     public Server(ServerWindow _serverWindow, int _port) {
 
-        clients = new ServerThread[MAX_THREAD];
         serverWindow = _serverWindow;
-        port = _port;
+        clients = new ServerThread[MAX_THREAD];  // create an array of threads where each thread is a client connection (socket)
         db = new Database(serverWindow.dbFilePath);
+        history = new History(this);
+        int DEFAULT_PORT = _port;
 
         try {
-            port = Integer.parseInt(serverWindow.serverPortTextField.getText());
-            server = new ServerSocket(port);
+            // START THE SERVER SOCKET
+            server = new ServerSocket(DEFAULT_PORT);
             port = server.getLocalPort();
-            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort() + "\n");
+
+            // START THE SERVER THREAD
             start();
-        } catch (IOException ioe) {
-            serverWindow.consoleTextArea.append("Cannot bind to port " + port + ": " + ioe.getMessage() + "\n");
+
+            // UPDATE THE UI ELEMENT
+            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort() + "\n");
+        } catch (IOException ioexception) {
+            serverWindow.consoleTextArea.append("Cannot bind to port " + port + ": " + ioexception.getMessage() + "\n");
         }
     }
 
+    // start the thread
     public void start() {
         if (thread == null) {
             thread = new Thread(this);
+
+            // START THE THREAD
             thread.start();
         }
     }
 
+    // stop the thread
     @SuppressWarnings("deprecation")
     public void stop() {
         if (thread != null) {
@@ -71,11 +83,10 @@ public class Server implements Runnable {
             thread = null;
         }
 
-        ServerThread clients[] = null;
-        ServerSocket server = null;
-        Thread thread = null;
-        Database db = null;
-        History history = null;
+        clients = null;
+        server = null;
+        db = null;
+        history = null;
 
         clientCount = 0;
         port = 9000;
@@ -84,23 +95,25 @@ public class Server implements Runnable {
         serverWindow = null;
     }
 
-// code executed in the thread
+    // code executed in the thread
     @Override
     public void run() {
-        while (thread != null) {
+        while (thread != null) {  // WHILE THREAD IS RUNNING..
             try {
                 serverWindow.consoleTextArea.append("Waiting for a client...\n");
+
+                // accept() METHOD BLOCKS UNTIL A CONNECTION IS MADE...THEN, ADD THE NEW CONNECTION AS A SERVER THREAD
                 addThread(server.accept());
             } catch (IOException exception) {
-                serverWindow.consoleTextArea.append("Server accept error: \n");
-                serverWindow.RetryStart(0);
+                serverWindow.consoleTextArea.append("Server accept error...\n");
+                serverWindow.RetryStart(10000);
             }
         }
     }
 
     // find the index of a client based on its ID
     private int findClient(int ID) {
-        for (int i = 0; i < clientCount; i++) {
+        for (int i = 0; i < clientCount; ++i) {
             if (clients[i].getID() == ID) {
                 return i;
             }
@@ -109,75 +122,91 @@ public class Server implements Runnable {
     }
 
     // handle incoming messages
-    public synchronized void handler(int ID, Message incomingMessage) throws IOException {
+    public synchronized void handler(int ID, Message inMsg) throws IOException {
 
-        // two cases: incoming message is a disconnection request, or not
-        if (incomingMessage.content.equals(".disconnect")) {
+        // handle messages based on type
+        switch (inMsg.type) {
+            case "connect":  // message type: connect
 
-            Announce("signout", "SERVER", incomingMessage.sender);
-            remove(ID);
+                clients[findClient(ID)].send(new Message("connect", "SERVER", "OK", inMsg.sender));
+                break;
 
-        } else {
+            case "login":  // message type: login
 
-            if (incomingMessage.type.equals("login")) {  // message type: login
-
-                if (findUserThread(incomingMessage.sender) == null) {
-                    if (db.checkLogin(incomingMessage.sender, incomingMessage.content)) {
-                        clients[findClient(ID)].username = incomingMessage.sender;
-                        clients[findClient(ID)].send(new Message("login", "SERVER", "TRUE", incomingMessage.sender));
-                        Announce("newuser", "SERVER", incomingMessage.sender);
-                        SendUserList(incomingMessage.sender);
+                if (findUserThread(inMsg.sender) == null) {
+                    if (db.checkLogin(inMsg.sender, inMsg.content)) {
+                        clients[findClient(ID)].username = inMsg.sender;
+                        clients[findClient(ID)].send(new Message("login", "SERVER", "TRUE", inMsg.sender));
+                        sendAll("newuser", "SERVER", inMsg.sender);
+                        SendUserList(inMsg.sender);
                     } else {
-                        clients[findClient(ID)].send(new Message("login", "SERVER", "FALSE", incomingMessage.sender));
+                        clients[findClient(ID)].send(new Message("login", "SERVER", "FALSE", inMsg.sender));
                     }
                 } else {
-                    clients[findClient(ID)].send(new Message("login", "SERVER", "FALSE", incomingMessage.sender));
+                    clients[findClient(ID)].send(new Message("login", "SERVER", "FALSE", inMsg.sender));
                 }
+                break;
 
-            } else if (incomingMessage.type.equals("message")) {  // message type: message
+            case "register":  // message type: register
 
-                history.addMessage(incomingMessage, timeStamp(), incomingMessage.sender);
-                if (incomingMessage.recipient.equals("Everyone")) {
-                    Announce("message", incomingMessage.sender, incomingMessage.content);
-                } else {
-                    findUserThread(incomingMessage.recipient).send(new Message(incomingMessage.type, incomingMessage.sender, incomingMessage.content, incomingMessage.recipient));
-                    clients[findClient(ID)].send(new Message(incomingMessage.type, incomingMessage.sender, incomingMessage.content, incomingMessage.recipient));
-                }
-
-            } else if (incomingMessage.type.equals("connect")) {  // message type: connect
-
-                clients[findClient(ID)].send(new Message("connect", "SERVER", "OK", incomingMessage.sender));
-
-            } else if (incomingMessage.type.equals("register")) {  // message type: register
-
-                if (findUserThread(incomingMessage.sender) == null) {
-                    if (!db.userExists(incomingMessage.sender)) {
-                        db.addUser(incomingMessage.sender, incomingMessage.content);
-                        clients[findClient(ID)].username = incomingMessage.sender;
-                        clients[findClient(ID)].send(new Message("register", "SERVER", "TRUE", incomingMessage.sender));
-                        clients[findClient(ID)].send(new Message("login", "SERVER", "TRUE", incomingMessage.sender));
-                        Announce("newuser", "SERVER", incomingMessage.sender);
-                        SendUserList(incomingMessage.sender);
-                        history.addNewUser(incomingMessage.sender);
+                if (findUserThread(inMsg.sender) == null) {
+                    if (!db.userExists(inMsg.sender)) {
+                        db.addUser(inMsg.sender, inMsg.content);
+                        clients[findClient(ID)].username = inMsg.sender;
+                        clients[findClient(ID)].send(new Message("register", "SERVER", "TRUE", inMsg.sender));
+                        clients[findClient(ID)].send(new Message("login", "SERVER", "TRUE", inMsg.sender));
+                        sendAll("newuser", "SERVER", inMsg.sender);
+                        SendUserList(inMsg.sender);
+                        history.addNewUser(inMsg.sender);
                     } else {
-                        clients[findClient(ID)].send(new Message("register", "SERVER", "FALSE", incomingMessage.sender));
+                        clients[findClient(ID)].send(new Message("register", "SERVER", "FALSE", inMsg.sender));
                     }
                 } else {
-                    clients[findClient(ID)].send(new Message("register", "SERVER", "FALSE", incomingMessage.sender));
+                    clients[findClient(ID)].send(new Message("register", "SERVER", "FALSE", inMsg.sender));
                 }
+                break;
 
-            } else if (incomingMessage.type.equals("history")) {  // message type: history
+            case "history":  // message type: history
 
-                history.sendHistory(incomingMessage.sender);
-            }
+                // SEND TO THE CLIENT THEIR CHAT HISTORY
+                history.sendHistory(inMsg.sender);
+                break;
+
+            case "message":  // message type: message
+
+                // FIRST, ADD THE MESSAGE TO THE CLIENT CHAT HISTORY
+                history.addMessage(inMsg, timeStamp(), inMsg.sender);
+                
+                if (inMsg.recipient.equals("Everyone")) {
+                
+                    // SEND THE MESSAGE TO EVERYONE
+                    sendAll("message", inMsg.sender, inMsg.content);
+                } else {
+                    
+                    // SEND THE PRIVATE MESSAGE TO THE RECIPIENT
+                    findUserThread(inMsg.recipient).send(new Message(inMsg.type, inMsg.sender, inMsg.content, inMsg.recipient));
+                    clients[findClient(ID)].send(new Message(inMsg.type, inMsg.sender, inMsg.content, inMsg.recipient));
+                }
+                break;
+
+            case "signout":  // message type: signout
+
+                // LET EVERYONE KNOW THAT A USER HAS SIGNED OUT
+                sendAll("signout", "SERVER", inMsg.sender);
+                
+                // REMOVE THE USER FROM THE SERVER
+                remove(ID);
+
+            default:
+                break;
         }
     }
 
     // make a public announcement
-    public void Announce(String type, String sender, String content) {
-        Message outgoingMessage = new Message(type, sender, content, "Everyone");
+    public void sendAll(String type, String sender, String content) {
+        Message outMsg = new Message(type, sender, content, "Everyone");
         for (int i = 0; i < clientCount; i++) {
-            clients[i].send(outgoingMessage);
+            clients[i].send(outMsg);
         }
     }
 
@@ -202,27 +231,31 @@ public class Server implements Runnable {
     @SuppressWarnings("deprecation")
     public synchronized void remove(int ID) {
 
-        int pos = findClient(ID);
-        if (pos >= 0) {
-            ServerThread toTerminate = clients[pos];
-            serverWindow.consoleTextArea.append("Removing client thread " + ID + " at " + pos + "\n");
-            if (pos < clientCount - 1) {
-                for (int i = pos + 1; i < clientCount; i++) {
+        int index = findClient(ID);
+        if (index >= 0) {
+            ServerThread toTerminate = clients[index];
+            
+            // SHIFT THE ARRAY IF NECESSARY (i.e. not removing the last element in the array)
+            if (index < clientCount - 1) {
+                for (int i = index + 1; i < clientCount; ++i) {
                     clients[i - 1] = clients[i];
                 }
             }
             clientCount--;
+            serverWindow.consoleTextArea.append("Removing client thread " + ID + " at " + index + "\n");
+            
             try {
+                // CLOSE THE SERVER THREAD
                 toTerminate.close();
-                System.out.println("CLOSING THREAD");
+                System.out.println("Closing thread ID: " + ID);
             } catch (IOException ioexception) {
-                serverWindow.consoleTextArea.append("Error closing thread: " + ioexception + "\n");
+                serverWindow.consoleTextArea.append("Error closing thread ID: " + ID + "\n" + ioexception + "\n");
             }
             toTerminate.stop();
         }
     }
 
-    // add a client thread
+    // add a server thread
     private void addThread(Socket socket) {
 
         if (clientCount < clients.length) {

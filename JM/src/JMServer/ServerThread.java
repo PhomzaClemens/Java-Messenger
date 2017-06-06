@@ -56,8 +56,13 @@ class ServerThread extends Thread {
         serverWindow.consoleTextArea.append("Server Thread " + ID + " running.\n");
         while (true) {
             try {
+                
+                // READ IN MESSAGES FROM THE CLIENT
                 Message message = (Message) streamIn.readObject();
+                
+                // SEND THE MESSAGES TO THE SERVER HANDLER
                 server.handler(ID, message);
+                
             } catch (IOException | ClassNotFoundException exception) {
                 System.out.println(ID + " ERROR reading: " + exception.getMessage());
                 server.remove(ID);

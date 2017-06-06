@@ -62,108 +62,127 @@ public class Client implements Runnable {
             System.out.println("Incoming: " + message.toString());
 
             // message cases:
-            if (message.type.equals("message")) {  // message type: message
+            switch (message.type) {
+                case "connect":  // message type: connect
 
-                // recipient is Me, or not Me
-                // display the message in the console window
-                if (message.recipient.equals(Me)) {
-                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Me]    " + message.content + "\n");
-                } else {
-                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> " + message.recipient + "]    " + message.content + "\n");
-                }
+                    // either server says OK, or connection error
+                    if (message.content.equals("OK")) {
 
-                // update the history window
-                clientWindow.requestHistory();
+                        // UPDATE THE UI ELEMENTS
+                        clientWindow.loginButton.setEnabled(true);
+                        clientWindow.registerButton.setEnabled(true);
+                        clientWindow.usernameTextField.setEnabled(true);
+                        clientWindow.passwordPasswordField.setEnabled(true);
+                        clientWindow.serverAddressTextField.setEditable(false);
+                        clientWindow.serverPortTextField.setEditable(false);
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Connection Successful\n");
+                    } else {
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Connection Error\n");
+                    }
+                    break;
 
-            } else if (message.type.equals("login")) {  // message type: login
+                case "login":  // message type: login
 
-                // login was successful
-                if (message.content.equals("TRUE")) {
+                    // LOGIN WAS SUCCESSFUL
+                    if (message.content.equals("TRUE")) {
 
-                    clientWindow.loginButton.setEnabled(false);
-                    clientWindow.registerButton.setEnabled(false);
-                    clientWindow.clearButton.setEnabled(true);
-                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Successful\n");
-                    clientWindow.usernameTextField.setEnabled(false);
-                    clientWindow.passwordPasswordField.setEnabled(false);
-                    clientWindow.historyButtonOn();
-                    clientWindow.setTitle("JMessenger - " + message.recipient);
+                        clientWindow.loginButton.setEnabled(false);
+                        clientWindow.registerButton.setEnabled(false);
+                        clientWindow.clearButton.setEnabled(true);
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Successful\n");
+                        clientWindow.usernameTextField.setEnabled(false);
+                        clientWindow.passwordPasswordField.setEnabled(false);
+                        clientWindow.historyButtonOn();
+                        clientWindow.setTitle("JMessenger - " + message.recipient);
 
-                    // login was unsuccessful
-                } else if (message.content.equals("FALSE")) {
-                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Failed\n");
-                }
+                        // LOGIN WAS UNSUCCESSFUL
+                    } else if (message.content.equals("FALSE")) {
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Failed\n");
+                    }
+                    break;
 
-            } else if (message.type.equals("connect")) {  // message type: connect
+                case "register":  // message type: register
 
-                clientWindow.loginButton.setEnabled(true);
-                clientWindow.registerButton.setEnabled(true);
-                clientWindow.usernameTextField.setEnabled(true);
-                clientWindow.passwordPasswordField.setEnabled(true);
-                clientWindow.serverAddressTextField.setEditable(false);
-                clientWindow.serverPortTextField.setEditable(false);
+                    // REGISTRATION SUCCESSFUL
+                    if (message.content.equals("TRUE")) {
 
-            } else if (message.type.equals("newuser")) {  // message type: newuser
+                        clientWindow.loginButton.setEnabled(false);
+                        clientWindow.registerButton.setEnabled(false);
+                        clientWindow.clearButton.setEnabled(true);
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Successful\n");
 
-                if (!message.content.equals(Me)) {
-                    boolean exists = false;
-                    for (int i = 0; i < userlist.getSize(); i++) {
-                        if (userlist.getElementAt(i).equals(message.content)) {
-                            exists = true;
-                            break;
+                    } else if (message.content.equals("FALSE")) {
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Failed\n");
+                    }
+                    break;
+
+                case "newuser":  // message type: newuser
+
+                    // CHECK TO SEE IF THE USER IS ALREADY IN THE USERLIST
+                    if (!message.content.equals(Me)) {
+                        boolean userNotInList = true;
+                        for (int i = 0; i < userlist.getSize(); ++i) {
+                            if (userlist.getElementAt(i).equals(message.content)) {
+                                userNotInList = false;
+                                break;
+                            }
+                        }
+
+                        // IF THE USER IS NOT IN THE USERLIST, ADD NEW USER TO THE USERLIST
+                        if (userNotInList) {
+                            userlist.addElement(message.content);
                         }
                     }
-                    if (!exists) {
-                        userlist.addElement(message.content);
-                    }
-                }
+                    break;
 
-            } else if (message.type.equals("register")) {  // message type: register
+                case "message":  // message type: message
 
-                // registration successful
-                if (message.content.equals("TRUE")) {
-
-                    clientWindow.loginButton.setEnabled(false);
-                    clientWindow.registerButton.setEnabled(false);
-                    clientWindow.clearButton.setEnabled(true);
-                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Successful\n");
-
-                } else if (message.content.equals("FALSE")) {
-                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Failed\n");
-                }
-
-            } else if (message.type.equals("signout")) {  // message type: signout
-
-                // message.content is the user that signed out
-                if (message.content.equals(Me)) {
-
-                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Me]    Bye\n");
-                    clientWindow.clearButton.setEnabled(false);
-                    clientWindow.serverAddressTextField.setEditable(true);
-                    clientWindow.serverPortTextField.setEditable(true);
-                    clientWindow.historyButtonOff();
-                    clientWindow.setTitle("JMessenger - Client");
-
-                    for (int i = 1; i < userlist.size(); i++) {
-                        userlist.removeElementAt(i);
+                    // DISPLAY THE MESSAGE
+                    if (message.recipient.equals(Me)) {
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Me]    " + message.content + "\n");
+                    } else {
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> " + message.recipient + "]    " + message.content + "\n");
                     }
 
-                    clientWindow.clientThread.stop();
-                    return false;
+                    // SEND THE SERVER A CHAT HISTORY REQUEST
+                    clientWindow.requestHistory();
+                    break;
 
-                } else {
-                    userlist.removeElement(message.content);
-                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Everyone]    " + message.content + " has signed out\n");
-                }
+                case "signout":  // message type: signout
 
-            } else if (message.type.equals("history")) {  // message type: history
+                    // message.content is the user that signed out
+                    if (message.content.equals(Me)) {
 
-                historyWindow.addTableEntry(message.sender, message.content, message.recipient, message.getTimeStamp());
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Me]    Bye\n");
+                        clientWindow.clearButton.setEnabled(false);
+                        clientWindow.serverAddressTextField.setEditable(true);
+                        clientWindow.serverPortTextField.setEditable(true);
+                        clientWindow.historyButtonOff();
+                        clientWindow.setTitle("JMessenger - Client");
 
-            } else {  // unknown message
-                clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Unknown message type\n");
+                        for (int i = 1; i < userlist.size(); i++) {
+                            userlist.removeElementAt(i);
+                        }
+
+                        clientWindow.clientThread.stop();
+                        return false;
+
+                    } else {
+                        userlist.removeElement(message.content);
+                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Everyone]    " + message.content + " has signed out\n");
+                    }
+                    break;
+
+                case "history":  // message type: history
+
+                    historyWindow.addTableEntry(message.sender, message.content, message.recipient, message.getTimeStamp());
+                    break;
+
+                default:  // case: unknown message
+
+                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Unknown message type\n");
+                    break;
             }
-
         } catch (IOException | ClassNotFoundException exception) {
             clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [Application -> Me]    Connection Failure\n");
             clientWindow.serverAddressTextField.setEditable(true);
