@@ -8,7 +8,7 @@ import java.util.Date;
 public class Server implements Runnable {
 
     public ServerThread clients[] = null;
-    public ServerSocket server = null;
+    public ServerSocket serverSocket = null;
     public Thread thread = null;
     public Database db = null;
     public History history = null;
@@ -27,14 +27,14 @@ public class Server implements Runnable {
 
         try {
             // START THE SERVER SOCKET
-            server = new ServerSocket(Integer.parseInt(serverWindow.serverPortTextField.getText()));
-            port = server.getLocalPort();
+            serverSocket = new ServerSocket(Integer.parseInt(serverWindow.serverPortTextField.getText()));
+            port = serverSocket.getLocalPort();
 
             // START THE SERVER THREAD
             start();
 
             // UPDATE THE UI ELEMENT
-            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort() + "\n");
+            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + serverSocket.getLocalPort() + "\n");
         } catch (IOException ioexception) {
             serverWindow.consoleTextArea.append("Cannot bind to port " + port + ": " + "Retrying...\n");
             serverWindow.RetryStart(port);
@@ -52,14 +52,14 @@ public class Server implements Runnable {
 
         try {
             // START THE SERVER SOCKET
-            server = new ServerSocket(DEFAULT_PORT);
-            port = server.getLocalPort();
+            serverSocket = new ServerSocket(DEFAULT_PORT);
+            port = serverSocket.getLocalPort();
 
             // START THE SERVER THREAD
             start();
 
             // UPDATE THE UI ELEMENT
-            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + server.getLocalPort() + "\n");
+            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + serverSocket.getLocalPort() + "\n");
         } catch (IOException ioexception) {
             serverWindow.consoleTextArea.append("Cannot bind to port " + port + ": " + ioexception.getMessage() + "\n");
         }
@@ -84,7 +84,7 @@ public class Server implements Runnable {
         }
 
         clients = null;
-        server = null;
+        serverSocket = null;
         db = null;
         history = null;
 
@@ -103,7 +103,7 @@ public class Server implements Runnable {
                 serverWindow.consoleTextArea.append("Waiting for a client...\n");
 
                 // accept() METHOD BLOCKS UNTIL A CONNECTION IS MADE...THEN, ADD THE NEW CONNECTION AS A SERVER THREAD
-                addThread(server.accept());
+                addThread(serverSocket.accept());
             } catch (IOException exception) {
                 serverWindow.consoleTextArea.append("Server accept error...\n");
                 serverWindow.RetryStart(10000);
@@ -177,7 +177,7 @@ public class Server implements Runnable {
                 // FIRST, ADD THE MESSAGE TO THE SENDER'S CHAT HISTORY
                 history.addMessage(inMsg, timeStamp(), inMsg.sender);
                 
-                // THEN, ADD THE MESSAGE TO THE RECIPIENT                
+                // THEN, ADD THE MESSAGE TO THE RECIPIENT
                 if (inMsg.recipient.equals("Everyone")) {
                 
                     // ADD THE MESSAGE TO EVERYONE'S CHAT HISTORY EXCEPT THE SENDER
