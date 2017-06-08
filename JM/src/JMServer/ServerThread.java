@@ -53,7 +53,7 @@ class ServerThread extends Thread {
     @SuppressWarnings("deprecation")
     @Override
     public void run() {
-        serverWindow.consoleTextArea.append("Server Thread " + ID + " running.\n");
+        serverWindow.appendConsole("Server Thread " + ID + " running.\n");
         while (true) {
             try {
                 

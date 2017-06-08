@@ -179,13 +179,13 @@ public class ServerWindow extends javax.swing.JFrame {
                     startServerButton.setText("Stop Server");
                     break;
                 case 1:  // 1 means invalid port number
-                    consoleTextArea.append("Please enter a valid port number.\n");
+                    appendConsole("Please enter a valid port number.\n");
                     break;
                 case 2:  // 2 means invalid database file
-                    consoleTextArea.append("Choose a valid database file.\n");
+                    appendConsole("Choose a valid database file.\n");
                     break;
                 default:  // 3 means invalid database file and port number
-                    consoleTextArea.append("Please enter a valid port number and database file.\n");
+                    appendConsole("Please enter a valid port number and database file.\n");
                     break;
             }
 
@@ -199,7 +199,7 @@ public class ServerWindow extends javax.swing.JFrame {
             startServerButton.setText("Start Server");
             historyFileTextField.setEnabled(false);
             openHistoryFileButton.setEnabled(false);
-            consoleTextArea.append("Server stopped running.\n");
+            appendConsole("Server stopped running.\n");
         }
 
     }//GEN-LAST:event_startServerButtonActionPerformed
@@ -295,6 +295,12 @@ public class ServerWindow extends javax.swing.JFrame {
     // checks to see if we're dealing with a Windows Operating System
     public boolean isWin32() {
         return System.getProperty("os.name").startsWith("Windows");
+    }
+    
+    // display message in the consoleTextArea
+    public void appendConsole(String toDisplay) {
+        consoleTextArea.append(toDisplay);
+        consoleTextArea.setCaretPosition(consoleTextArea.getText().length());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

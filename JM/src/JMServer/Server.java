@@ -34,9 +34,9 @@ public class Server implements Runnable {
             start();
 
             // UPDATE THE UI ELEMENT
-            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + serverSocket.getLocalPort() + "\n");
+            serverWindow.appendConsole("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + serverSocket.getLocalPort() + "\n");
         } catch (IOException ioexception) {
-            serverWindow.consoleTextArea.append("Cannot bind to port " + port + ": " + "Retrying...\n");
+            serverWindow.appendConsole("Cannot bind to port " + port + ": " + "Retrying...\n");
             serverWindow.RetryStart(port);
         }
     }
@@ -59,9 +59,9 @@ public class Server implements Runnable {
             start();
 
             // UPDATE THE UI ELEMENT
-            serverWindow.consoleTextArea.append("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + serverSocket.getLocalPort() + "\n");
+            serverWindow.appendConsole("Server running...\nIP Address: " + InetAddress.getLocalHost() + ", Port: " + serverSocket.getLocalPort() + "\n");
         } catch (IOException ioexception) {
-            serverWindow.consoleTextArea.append("Cannot bind to port " + port + ": " + ioexception.getMessage() + "\n");
+            serverWindow.appendConsole("Cannot bind to port " + port + ": " + ioexception.getMessage() + "\n");
         }
     }
 
@@ -100,12 +100,12 @@ public class Server implements Runnable {
     public void run() {
         while (thread != null) {  // WHILE THREAD IS RUNNING..
             try {
-                serverWindow.consoleTextArea.append("Waiting for a client...\n");
+                serverWindow.appendConsole("Waiting for a client...\n");
 
                 // accept() METHOD BLOCKS UNTIL A CONNECTION IS MADE...THEN, ADD THE NEW CONNECTION AS A SERVER THREAD
                 addThread(serverSocket.accept());
             } catch (IOException exception) {
-                serverWindow.consoleTextArea.append("Server accept error...\n");
+                serverWindow.appendConsole("Server accept error...\n");
                 serverWindow.RetryStart(10000);
             }
         }
@@ -253,14 +253,14 @@ public class Server implements Runnable {
                 }
             }
             clientCount--;
-            serverWindow.consoleTextArea.append("Removing client thread " + ID + " at " + index + "\n");
+            serverWindow.appendConsole("Removing client thread " + ID + " at " + index + "\n");
             
             try {
                 // CLOSE THE SERVER THREAD
                 toTerminate.close();
                 System.out.println("Closing thread ID: " + ID);
             } catch (IOException ioexception) {
-                serverWindow.consoleTextArea.append("Error closing thread ID: " + ID + "\n" + ioexception + "\n");
+                serverWindow.appendConsole("Error closing thread ID: " + ID + "\n" + ioexception + "\n");
             }
             toTerminate.interrupt();
         }
@@ -270,17 +270,17 @@ public class Server implements Runnable {
     private void addThread(Socket socket) {
 
         if (clientCount < clients.length) {
-            serverWindow.consoleTextArea.append("Client accepted: " + socket + "\n");
+            serverWindow.appendConsole("Client accepted: " + socket + "\n");
             clients[clientCount] = new ServerThread(this, socket);
             try {
                 clients[clientCount].open();
                 clients[clientCount].start();
                 clientCount++;
             } catch (IOException ioe) {
-                serverWindow.consoleTextArea.append("Error opening thread: " + ioe + "\n");
+                serverWindow.appendConsole("Error opening thread: " + ioe + "\n");
             }
         } else {
-            serverWindow.consoleTextArea.append("Client refused: maximum " + clients.length + " reached.\n");
+            serverWindow.appendConsole("Client refused: maximum " + clients.length + " reached.\n");
         }
     }
 

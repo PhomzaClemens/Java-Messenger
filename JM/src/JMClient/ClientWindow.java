@@ -49,6 +49,8 @@ public class ClientWindow extends javax.swing.JFrame {
         DefaultCaret caret = (DefaultCaret) consoleTextArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
+        //DefaultCaret caret = (DefaultCaret) textArea.getCaret();
+        //caret.setUpdatePolicy(ALWAYS_UPDATE);
         this.addWindowListener(new WindowListener() {
 
             @Override
@@ -400,12 +402,12 @@ public class ClientWindow extends javax.swing.JFrame {
                     passwordPasswordField.setEditable(true);
 
                 } catch (IOException exception) {
-                    consoleTextArea.append("[Application -> Me]    Server not found\n");
+                    appendConsole("[Application -> Me]    Server not found\n");
                     serverAddressTextField.requestFocus();
                 }
 
             } else if (!validated) {
-                consoleTextArea.append("[Application -> Me]    User Input Error: Please Re-Enter the Server Address and/or Port Number\n");
+                appendConsole("[Application -> Me]    User Input Error: Please Re-Enter the Server Address and/or Port Number\n");
                 serverAddressTextField.requestFocus();
                 return;
             }
@@ -413,7 +415,7 @@ public class ClientWindow extends javax.swing.JFrame {
         } else if (connectButton.getText().equals("Disconnect")) {
 
             String Me = username;
-            
+
             // send a signout message to the server
             client.send(new Message("signout", Me, ".disconnect", "SERVER"));
 
@@ -617,6 +619,12 @@ public class ClientWindow extends javax.swing.JFrame {
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());
     }
 
+    // display message in the consoleTextArea
+    public void appendConsole(String toDisplay) {
+        consoleTextArea.append(toDisplay);
+        consoleTextArea.setCaretPosition(consoleTextArea.getText().length() - 1);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JMessengerLabel;
     public javax.swing.JButton clearButton;
@@ -647,7 +655,7 @@ public class ClientWindow extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             new ClientWindow().setVisible(true);
         });
-        
+
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
 //                new ClientWindow().setVisible(true);

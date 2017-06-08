@@ -74,9 +74,9 @@ public class Client implements Runnable {
                         clientWindow.passwordPasswordField.setEnabled(true);
                         clientWindow.serverAddressTextField.setEditable(false);
                         clientWindow.serverPortTextField.setEditable(false);
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Connection Successful\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [SERVER -> Me]    Connection Successful\n");
                     } else {
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Connection Error\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [SERVER -> Me]    Connection Error\n");
                     }
                     break;
 
@@ -88,7 +88,7 @@ public class Client implements Runnable {
                         clientWindow.loginButton.setEnabled(false);
                         clientWindow.registerButton.setEnabled(false);
                         clientWindow.clearButton.setEnabled(true);
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Successful\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [SERVER -> Me]    Login Successful\n");
                         clientWindow.usernameTextField.setEnabled(false);
                         clientWindow.passwordPasswordField.setEnabled(false);
                         clientWindow.messageTextField.setEditable(true);
@@ -97,7 +97,7 @@ public class Client implements Runnable {
 
                         // LOGIN WAS UNSUCCESSFUL
                     } else if (message.content.equals("FALSE")) {
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Login Failed\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [SERVER -> Me]    Login Failed\n");
                     }
                     break;
 
@@ -109,10 +109,10 @@ public class Client implements Runnable {
                         clientWindow.loginButton.setEnabled(false);
                         clientWindow.registerButton.setEnabled(false);
                         clientWindow.clearButton.setEnabled(true);
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Successful\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [SERVER -> Me]    Registration Successful\n");
 
                     } else if (message.content.equals("FALSE")) {
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Registration Failed\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [SERVER -> Me]    Registration Failed\n");
                     }
                     break;
 
@@ -139,9 +139,9 @@ public class Client implements Runnable {
 
                     // DISPLAY THE MESSAGE
                     if (message.recipient.equals(Me)) {
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Me]    " + message.content + "\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [" + message.sender + " -> Me]    " + message.content + "\n");
                     } else {
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> " + message.recipient + "]    " + message.content + "\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [" + message.sender + " -> " + message.recipient + "]    " + message.content + "\n");
                     }
 
                     // SEND THE SERVER A CHAT HISTORY REQUEST
@@ -154,7 +154,7 @@ public class Client implements Runnable {
                     
                     if (message.content.equals(Me)) {  // case: the client signed out
 
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Me]    Bye\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [" + message.sender + " -> Me]    Bye\n");
                         clientWindow.clearButton.setEnabled(false);
                         clientWindow.serverAddressTextField.setEditable(true);
                         clientWindow.serverPortTextField.setEditable(true);
@@ -170,7 +170,7 @@ public class Client implements Runnable {
 
                     } else {  // some other client signed out
                         userlist.removeElement(message.content);
-                        clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [" + message.sender + " -> Everyone]    " + message.content + " has signed out\n");
+                        clientWindow.appendConsole("[" + timeStamp() + "] - [" + message.sender + " -> Everyone]    " + message.content + " has signed out\n");
                     }
                     break;
 
@@ -181,11 +181,11 @@ public class Client implements Runnable {
 
                 default:  // case: unknown message
 
-                    clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [SERVER -> Me]    Unknown message type\n");
+                    clientWindow.appendConsole("[" + timeStamp() + "] - [SERVER -> Me]    Unknown message type\n");
                     break;
             }
         } catch (IOException | ClassNotFoundException exception) {
-            clientWindow.consoleTextArea.append("[" + timeStamp() + "] - [Application -> Me]    Connection Failure\n");
+            clientWindow.appendConsole("[" + timeStamp() + "] - [Application -> Me]    Connection Failure\n");
             clientWindow.serverAddressTextField.setEditable(true);
             clientWindow.serverPortTextField.setEditable(true);
             clientWindow.clearButton.setEnabled(false);
