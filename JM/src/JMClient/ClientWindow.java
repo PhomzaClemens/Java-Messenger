@@ -384,7 +384,7 @@ public class ClientWindow extends javax.swing.JFrame {
                 try {
                     client = new Client(this, historyWindow);  // instantiate a new client attached to this clientWindow instance
                     clientThread = new Thread(client);  // create a new client thread
-                    clientThread.start();
+                    clientThread.start();  // call the method client.run()
 
                     // send a connection request to the server
                     client.send(new Message("connect", "CLIENT", "connection request", "SERVER"));
@@ -644,10 +644,14 @@ public class ClientWindow extends javax.swing.JFrame {
 
     public static void main(String args[]) {
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ClientWindow().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ClientWindow().setVisible(true);
         });
+        
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new ClientWindow().setVisible(true);
+//            }
+//        });
     }
 }

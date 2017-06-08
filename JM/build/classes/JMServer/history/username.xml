@@ -2,98 +2,62 @@
 <data>
 <message>
     <sender>username</sender>
-    <content>a</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:23 AM</time>
+    <time>6/7/17 3:44 PM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>b</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:23 AM</time>
+    <time>6/7/17 3:52 PM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>c</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:23 AM</time>
+    <time>6/7/17 3:55 PM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>d</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:23 AM</time>
+    <time>6/7/17 3:56 PM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>a</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:28 AM</time>
+    <time>6/7/17 3:57 PM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>b</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:28 AM</time>
+    <time>6/7/17 3:58 PM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>c</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:28 AM</time>
+    <time>6/7/17 3:59 PM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>d</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:28 AM</time>
+    <time>6/7/17 4:00 PM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>e</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:28 AM</time>
+    <time>6/7/17 4:06 PM</time>
   </message>
 <message>
     <sender>username</sender>
-    <content>f</content>
+    <content>test message</content>
     <recipient>Everyone</recipient>
-    <time>6/6/17 12:28 AM</time>
-  </message>
-<message>
-    <sender>a</sender>
-    <content>sdsdghdsh</content>
-    <recipient>Everyone</recipient>
-    <time>6/6/17 12:28 AM</time>
-  </message>
-<message>
-    <sender>a</sender>
-    <content>dsgasdfdasf</content>
-    <recipient>Everyone</recipient>
-    <time>6/6/17 12:29 AM</time>
-  </message>
-<message>
-    <sender>a</sender>
-    <content>asdfasdfasdf</content>
-    <recipient>Everyone</recipient>
-    <time>6/6/17 12:29 AM</time>
-  </message>
-<message>
-    <sender>a</sender>
-    <content>asdfasdgfadsfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/6/17 12:29 AM</time>
-  </message>
-<message>
-    <sender>a</sender>
-    <content>sdfgsdfg</content>
-    <recipient>Everyone</recipient>
-    <time>6/6/17 12:29 AM</time>
-  </message>
-<message>
-    <sender>a</sender>
-    <content>test</content>
-    <recipient>Everyone</recipient>
-    <time>6/6/17 12:29 AM</time>
+    <time>6/7/17 4:08 PM</time>
   </message>
 </data>
