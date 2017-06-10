@@ -54,14 +54,16 @@ class ServerThread extends Thread {
     @Override
     public void run() {
         serverWindow.appendConsole("Server Thread " + ID + " running.\n");
-        while (true) {
+        
+        boolean isRunning = true;
+        while (isRunning) {
             try {
                 
                 // READ IN MESSAGES FROM THE CLIENT
                 Message message = (Message) streamIn.readObject();
                 
                 // SEND THE MESSAGES TO THE SERVER HANDLER
-                server.handler(ID, message);
+                isRunning = server.handler(ID, message);
                 
             } catch (IOException | ClassNotFoundException exception) {
                 System.out.println(ID + " ERROR reading: " + exception.getMessage());

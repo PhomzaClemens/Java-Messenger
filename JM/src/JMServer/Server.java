@@ -122,7 +122,7 @@ public class Server implements Runnable {
     }
 
     // handle incoming messages
-    public synchronized void handler(int ID, Message inMsg) throws IOException {
+    public synchronized boolean handler(int ID, Message inMsg) throws IOException {
 
         // handle messages based on type
         switch (inMsg.type) {
@@ -207,14 +207,17 @@ public class Server implements Runnable {
                 
                 // REMOVE THE USER FROM THE SERVER
                 remove(ID);
+                
+                return false;  // break out of the server thread while-loop
 
             default:
                 break;
         }
+        return true;
     }
 
     // make a public announcement
-    public void sendAll(String type, String sender, String content) {
+    private void sendAll(String type, String sender, String content) {
         Message outMsg = new Message(type, sender, content, "Everyone");
         for (int i = 0; i < clientCount; i++) {
             clients[i].send(outMsg);
@@ -222,7 +225,7 @@ public class Server implements Runnable {
     }
 
     // send the user the current list of everyone logged on
-    public void SendUserList(String user) {
+    private void SendUserList(String user) {
         for (int i = 0; i < clientCount; i++) {
             findUserThread(user).send(new Message("newuser", "SERVER", clients[i].username, user));
         }
@@ -285,7 +288,7 @@ public class Server implements Runnable {
     }
 
     // get the current time stamp
-    public String timeStamp() {
+    private String timeStamp() {
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());
     }
 }

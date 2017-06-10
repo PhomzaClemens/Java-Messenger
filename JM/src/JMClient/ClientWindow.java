@@ -409,7 +409,6 @@ public class ClientWindow extends javax.swing.JFrame {
             } else if (!validated) {
                 appendConsole("[Application -> Me]    User Input Error: Please Re-Enter the Server Address and/or Port Number\n");
                 serverAddressTextField.requestFocus();
-                return;
             }
 
         } else if (connectButton.getText().equals("Disconnect")) {
@@ -442,11 +441,7 @@ public class ClientWindow extends javax.swing.JFrame {
 
         try {
             Integer portNumber = Integer.parseInt(serverPortTextField.getText());
-            if (0 <= portNumber && portNumber <= 65535) {
-                return true;
-            } else {
-                return false;  // port number is out-of-bounds (ie. 0-65535)
-            }
+            return (0 <= portNumber && portNumber <= 65535); // port number is out-of-bounds (ie. 0-65535)
         } catch (NumberFormatException numberFormatException) {
             return false;
         }
@@ -558,9 +553,7 @@ public class ClientWindow extends javax.swing.JFrame {
         // go to JMessenger's GitHub repository
         try {
             Desktop.getDesktop().browse(new URI("https://github.com/kimdj/Java-Messenger"));
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(ClientWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (URISyntaxException | IOException ex) {
             Logger.getLogger(ClientWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JMessengerLabelMouseClicked

@@ -8,8 +8,8 @@ import javax.swing.text.DefaultCaret;
 public class ServerWindow extends javax.swing.JFrame {
 
     public Server server = null;
-    public Thread serverThread = null;
     public String dbFilePath = "";
+    public String historyFilePath = "";
     public JFileChooser fileChooser = null;
 
     public ServerWindow() {
@@ -93,7 +93,7 @@ public class ServerWindow extends javax.swing.JFrame {
         serverPortLabel.setText("Server Port:");
 
         historyFileLabel.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
-        historyFileLabel.setText("History File:");
+        historyFileLabel.setText("History Directory:");
 
         openHistoryFileButton.setFont(new java.awt.Font("Helvetica Neue", 0, 13)); // NOI18N
         openHistoryFileButton.setText("Open");
@@ -122,12 +122,12 @@ public class ServerWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(historyFileTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                                .addComponent(historyFileTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(openHistoryFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(252, 252, 252))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(databaseFileTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                                .addComponent(databaseFileTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(openDatabaseFileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -172,6 +172,9 @@ public class ServerWindow extends javax.swing.JFrame {
                     // START THE SERVER
                     server = new Server(this);
                     
+                    // SETUP THE HISTORY FILE
+                    server.history.setFilePath(historyFilePath);
+                    
                     // UPDATE THE UI ELEMENTS
                     openDatabaseFileButton.setEnabled(false);
                     serverPortTextField.setEnabled(false);
@@ -213,7 +216,8 @@ public class ServerWindow extends javax.swing.JFrame {
 
     private void openDatabaseFileButtonActionPerformed(java.awt.event.ActionEvent event) {//GEN-FIRST:event_openDatabaseFileButtonActionPerformed
 
-        File workingDirectory = new File(System.getProperty("user.dir") + "/src");
+        //File workingDirectory = new File(System.getProperty("user.dir") + "/src");
+        File workingDirectory = new java.io.File(".");  // workingDirectory is where this executable resides
         fileChooser.setCurrentDirectory(workingDirectory);
         fileChooser.showDialog(this, "Open");
         File file = fileChooser.getSelectedFile();
@@ -226,7 +230,8 @@ public class ServerWindow extends javax.swing.JFrame {
             }
             databaseFileTextField.setText(dbFilePath);
 
-            startServerButton.setEnabled(true);
+            openHistoryFileButton.setEnabled(true);
+            //startServerButton.setEnabled(true);
         }
 
         System.out.println("Database File Opened");
@@ -247,18 +252,21 @@ public class ServerWindow extends javax.swing.JFrame {
     private void openHistoryFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openHistoryFileButtonActionPerformed
 
         JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setCurrentDirectory(new java.io.File("."));  // setting the current directory to where this execuable resides
         chooser.setDialogTitle("Open History File");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
 
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
-            server.history.setFilePath(file.getPath() + "/");
+            //server.history.setFilePath(file.getPath() + "/");
+            historyFilePath = file.getPath() + "/";
             historyFileTextField.setText(file.getPath() + "/");
             
             openHistoryFileButton.setEnabled(false);
             System.out.println("History File Opened");
+            
+            startServerButton.setEnabled(true);
         }
     }//GEN-LAST:event_openHistoryFileButtonActionPerformed
 
@@ -319,11 +327,15 @@ public class ServerWindow extends javax.swing.JFrame {
 
     public static void main(String args[]) {
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ServerWindow().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ServerWindow().setVisible(true);
         });
+        
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new ServerWindow().setVisible(true);
+//            }
+//        });
     }
 
 }
