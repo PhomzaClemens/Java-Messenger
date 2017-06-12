@@ -217,7 +217,7 @@ public class Server implements Runnable {
     }
 
     // make a public announcement
-    private void sendAll(String type, String sender, String content) {
+    public void sendAll(String type, String sender, String content) {
         Message outMsg = new Message(type, sender, content, "Everyone");
         for (int i = 0; i < clientCount; i++) {
             clients[i].send(outMsg);
@@ -225,7 +225,7 @@ public class Server implements Runnable {
     }
 
     // send the user the current list of everyone logged on
-    private void SendUserList(String user) {
+    public void SendUserList(String user) {
         for (int i = 0; i < clientCount; i++) {
             findUserThread(user).send(new Message("newuser", "SERVER", clients[i].username, user));
         }
@@ -288,7 +288,7 @@ public class Server implements Runnable {
     }
 
     // get the current time stamp
-    private String timeStamp() {
+    public String timeStamp() {
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date());
     }
 }
