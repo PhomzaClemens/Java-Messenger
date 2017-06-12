@@ -104,88 +104,88 @@ public class ServerTest {
         assertNotNull(serverWindow.server.thread);
     }
 
-    /**
-     * Test of handler method, of class Server.
-     */
-    @Test
-    public void testHandler() throws Exception {
-        System.out.println("handler");
-        int ID = 0;
-        Message inMsg = null;
-        Server instance = null;
-        instance.handler(ID, inMsg);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of sendAll method, of class Server.
-     */
-    @Test
-    public void testSendAll() {
-        System.out.println("sendAll");
-        String type = "";
-        String sender = "";
-        String content = "";
-        Server instance = null;
-        instance.sendAll(type, sender, content);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of SendUserList method, of class Server.
-     */
-    @Test
-    public void testSendUserList() {
-        System.out.println("SendUserList");
-        String user = "";
-        Server instance = null;
-        instance.SendUserList(user);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of findUserThread method, of class Server.
-     */
-    @Test
-    public void testFindUserThread() {
-        System.out.println("findUserThread");
-        String _username = "";
-        Server instance = null;
-        ServerThread expResult = null;
-        ServerThread result = instance.findUserThread(_username);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of remove method, of class Server.
-     */
-    @Test
-    public void testRemove() {
-        System.out.println("remove");
-        int ID = 0;
-        Server instance = null;
-        instance.remove(ID);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of timeStamp method, of class Server.
-     */
-    @Test
-    public void testTimeStamp() {
-        System.out.println("timeStamp");
-        Server instance = null;
-        String expResult = "";
-        String result = instance.timeStamp();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
+//    /**
+//     * Test of handler method, of class Server.
+//     */
+//    @Test
+//    public void testHandler() throws Exception {
+//        System.out.println("handler");
+//        int ID = 0;
+//        Message inMsg = null;
+//        Server instance = null;
+//        instance.handler(ID, inMsg);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
+//
+//    /**
+//     * Test of sendAll method, of class Server.
+//     */
+//    @Test
+//    public void testSendAll() {
+//        System.out.println("sendAll");
+//        String type = "";
+//        String sender = "";
+//        String content = "";
+//        Server instance = null;
+//        instance.sendAll(type, sender, content);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
+//
+//    /**
+//     * Test of SendUserList method, of class Server.
+//     */
+//    @Test
+//    public void testSendUserList() {
+//        System.out.println("SendUserList");
+//        String user = "";
+//        Server instance = null;
+//        instance.SendUserList(user);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
+//
+//    /**
+//     * Test of findUserThread method, of class Server.
+//     */
+//    @Test
+//    public void testFindUserThread() {
+//        System.out.println("findUserThread");
+//        String _username = "";
+//        Server instance = null;
+//        ServerThread expResult = null;
+//        ServerThread result = instance.findUserThread(_username);
+//        assertEquals(expResult, result);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
+//
+//    /**
+//     * Test of remove method, of class Server.
+//     */
+//    @Test
+//    public void testRemove() {
+//        System.out.println("remove");
+//        int ID = 0;
+//        Server instance = null;
+//        instance.remove(ID);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
+//
+//    /**
+//     * Test of timeStamp method, of class Server.
+//     */
+//    @Test
+//    public void testTimeStamp() {
+//        System.out.println("timeStamp");
+//        Server instance = null;
+//        String expResult = "";
+//        String result = instance.timeStamp();
+//        assertEquals(expResult, result);
+//        // TODO review the generated test code and remove the default call to fail.
+//        fail("The test case is a prototype.");
+//    }
+//
 }
